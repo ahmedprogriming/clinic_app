@@ -8,7 +8,11 @@ class CustomTextFiled extends StatelessWidget {
     this.maxLines = 1,
     this.onSave,
     this.onChanged,
-    this.initialValue,
+    this.initialValue, 
+    this.textdecoration,
+    this.obsecureText=false, 
+    this.onVisibilityPressed,
+      this.showPasswordIcon=false,
   });
 
   final String? hint;
@@ -16,6 +20,10 @@ class CustomTextFiled extends StatelessWidget {
   final void Function(String?)? onSave;
   final void Function(String)? onChanged;
   final String? initialValue;
+  final TextDecoration? textdecoration; 
+  final bool? obsecureText;
+  final VoidCallback? onVisibilityPressed;
+final bool? showPasswordIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +31,9 @@ class CustomTextFiled extends StatelessWidget {
       initialValue: initialValue,
       onChanged: onChanged,
       onSaved: onSave,
+      obscureText: obsecureText!,
+      textDirection:textdecoration==TextDecoration.none?TextDirection.rtl:TextDirection.ltr,
+     
       validator: (value) {
         if(value?.isEmpty ?? true)
         {
@@ -33,20 +44,31 @@ class CustomTextFiled extends StatelessWidget {
           return null;
         }
       },
-      cursorColor: const Color(0xffAE7733),
+      cursorColor: kFontColor,
       //textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
       maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hint,
+        
+         suffixIcon: showPasswordIcon!
+    ? IconButton(
+        onPressed: onVisibilityPressed,
+        icon: Icon(
+          obsecureText!
+              ? Icons.visibility_off
+              : Icons.visibility,
+        ),
+      )
+    : null,
         hintStyle: TextStyle(color:Colors.black),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color:Color(0xffAE7733)),
+          borderSide: const BorderSide(color:kFontColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color:Color(0xffAE7733)),
+          borderSide: const BorderSide(color:kFontColor), 
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

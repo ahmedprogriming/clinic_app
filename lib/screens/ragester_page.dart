@@ -1,17 +1,16 @@
 import 'package:clinic_app/constant.dart';
-import 'package:clinic_app/screens/ragester_page.dart';
 import 'package:clinic_app/widget/custom_button.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class RagesterPage extends StatelessWidget {
+  const RagesterPage({super.key});
 
-  static const String id = 'LoginPage';
+   static String id = 'RagesterPage';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     return Scaffold(
        backgroundColor: kPrimaryColor,
       
         body: Padding(
@@ -20,14 +19,14 @@ class LoginPage extends StatelessWidget {
             //key: formKey,
             child: ListView(
               children: [
-                SizedBox(height: 75),
+                SizedBox(height: 40),
                 Image.asset('lib/assets/images/logo.png', height: 150),
                 SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "تسجيل الدخول",
+                      "انشاء حساب",
                       style: TextStyle(
                         fontSize: 32,
                         color:kFontColor,
@@ -36,11 +35,19 @@ class LoginPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 75),
+                SizedBox(height: 40),
+                 CustomTextFiled(
+                  hint: 'أسم المستخدم',
+                  textdecoration: TextDecoration.none,
+                  /*onChange: (data) {
+                    email = data;
+                  },
+                  */
+                ),
             
                 const SizedBox(height: 20),
                 CustomTextFiled(
-                  hint: 'البريدالالكتروني',
+                  hint: 'البريد الالكتروني',
                   /*onChange: (data) {
                     email = data;
                   },
@@ -48,8 +55,17 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 CustomTextFiled(
-                obsecureText: true,
+                  obsecureText: true,
                   hint: 'كلمة المرور',
+                  /*onChange: (data) {
+                    password = data;
+                  },
+                  */
+                ),
+                  SizedBox(height: 15),
+                CustomTextFiled(
+                   obsecureText: true,
+                  hint: 'تأكيد كلمة المرور',
                   /*onChange: (data) {
                     password = data;
                   },
@@ -57,7 +73,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 CustomButton(
-              namebutton: 'تسجيل الدخول',
+              namebutton: 'تسجيل ',
              /* onTap: () async {
               if(formKey.currentState!.validate())
                 
@@ -101,17 +117,17 @@ class LoginPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RagesterPage.id);
+                        Navigator.pushNamed(context, 'LoginPage');
                       },
-            
                       child: Text(
-                        'انشاء حساب',
-                        style: TextStyle(color:kFontColor, fontWeight: FontWeight.bold),
+                      'تسجيل الدخول',
+                        style: TextStyle(color:kFontColor, fontWeight: FontWeight.bold ),
                       ),
                     ),
-                      Text(
-                        'ليس لديك حساب؟ ',
-                      style: TextStyle(color: Colors.black87),
+                    Text(
+                       'هل لديك حساب بالفعل؟',
+                     
+                      style: TextStyle(color:Colors.black87),
                     ),
                   ],
                 ),

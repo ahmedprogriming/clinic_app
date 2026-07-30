@@ -1,4 +1,5 @@
 import 'package:clinic_app/screens/login_page.dart';
+import 'package:clinic_app/screens/ragester_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -19,6 +20,7 @@ class ClinicApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
       LoginPage.id: (context) => const LoginPage(),
+      RagesterPage.id: (context) => const RagesterPage(),
        
       },
       initialRoute: LoginPage.id,
