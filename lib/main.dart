@@ -1,3 +1,4 @@
+import 'package:clinic_app/screens/dashboard_page.dart';
 import 'package:clinic_app/screens/login_page.dart';
 import 'package:clinic_app/screens/ragester_page.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,10 @@ class ClinicApp extends StatelessWidget {
       routes: {
       LoginPage.id: (context) => const LoginPage(),
       RagesterPage.id: (context) => const RagesterPage(),
+      DashboardPage.id: (context) => const DashboardPage(),
        
       },
-      initialRoute: LoginPage.id,
+      initialRoute: DashboardPage.id,
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor:Color(0xffFDF9F1)
