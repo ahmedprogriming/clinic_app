@@ -62,6 +62,9 @@ flutter:
   assets:
      - lib/assets/images/logo.png
      - lib/assets/images/عيادة صحتك أهم حجامة وتدليك2.png
+     - lib/assets/images/self.jpg
+     - lib/assets/images/icons8-avatar-50.png
+     - lib/assets/images/icons8-filter-50.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

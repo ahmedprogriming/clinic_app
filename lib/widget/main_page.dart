@@ -1,3 +1,4 @@
+import 'package:clinic_app/screens/patients_page.dart';
 import 'package:clinic_app/widget/custom_card.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,11 @@ class MainPage extends StatelessWidget {
               
               children: [
                 
-              CustomCard(text: 'المرضى',),
+              CustomCard(text: 'المرضى',
+              onTap: ()
+              {
+               Navigator.pushNamed(context,PatientsPage.id) ;
+              },),
           
                CustomCard(text: 'المستخدمين',),
               
