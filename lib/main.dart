@@ -1,3 +1,4 @@
+import 'package:clinic_app/screens/add_new_patient_page.dart';
 import 'package:clinic_app/screens/dashboard_page.dart';
 import 'package:clinic_app/screens/login_page.dart';
 import 'package:clinic_app/screens/patients_page.dart';
@@ -25,6 +26,7 @@ class ClinicApp extends StatelessWidget {
       RagesterPage.id: (context) => const RagesterPage(),
       DashboardPage.id: (context) => const DashboardPage(),
       PatientsPage.id:(context) => const PatientsPage(),
+      AddNewPatientPage.id:(context)=> const AddNewPatientPage()
        
       },
       initialRoute: DashboardPage.id,

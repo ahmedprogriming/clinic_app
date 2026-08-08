@@ -13,6 +13,11 @@ class CustomTextFiled extends StatelessWidget {
     this.obsecureText=false, 
     this.onVisibilityPressed,
       this.showPasswordIcon=false,
+      this.width,
+      this.height,
+      this.hintColor,
+      this.bordercolor,
+      this.icon,
   });
 
   final String? hint;
@@ -24,55 +29,73 @@ class CustomTextFiled extends StatelessWidget {
   final bool? obsecureText;
   final VoidCallback? onVisibilityPressed;
 final bool? showPasswordIcon;
+final double? width;
+  final double? height;
+  final Color? hintColor;
+  final Color? bordercolor;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: initialValue,
-      onChanged: onChanged,
-      onSaved: onSave,
-      obscureText: obsecureText!,
-      textDirection:textdecoration==TextDecoration.none?TextDirection.rtl:TextDirection.ltr,
-     
-      validator: (value) {
-        if(value?.isEmpty ?? true)
-        {
-          return 'The filed is required';
-        }
-        else
-        {
-          return null;
-        }
-      },
-      cursorColor: kFontColor,
-      //textAlign: TextAlign.center,
-        textAlignVertical: TextAlignVertical.center,
-      maxLines: maxLines,
-      decoration: InputDecoration(
-        hintText: hint,
+    return SizedBox(
+      height: height,
+      width: width,
+      child: TextFormField(
+        initialValue: initialValue,
+        onChanged: onChanged,
+        onSaved: onSave,
+        obscureText: obsecureText!,
         
-         suffixIcon: showPasswordIcon!
-    ? IconButton(
-        onPressed: onVisibilityPressed,
-        icon: Icon(
-          obsecureText!
-              ? Icons.visibility_off
-              : Icons.visibility,
-        ),
-      )
-    : null,
-        hintStyle: TextStyle(color:Colors.black),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color:kFontColor),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color:kFontColor), 
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color:Color.fromARGB(255, 110, 61, 1)),
+        textDirection:textdecoration==TextDecoration.none?TextDirection.rtl:TextDirection.ltr,
+       
+        validator: (value) {
+          if(value?.isEmpty ?? true)
+          {
+            return 'The filed is required';
+          }
+          else
+          {
+            return null;
+          }
+        },
+        cursorColor: kFontColor,
+        //textAlign: TextAlign.center,
+          textAlignVertical: TextAlignVertical.center,
+        maxLines: maxLines,
+        decoration: InputDecoration(
+          hintText: hint,
+           prefixIcon: Icon(
+                       icon,
+                        color: Color(0xffC1AD94),
+                        size: 12,
+                     
+                      ),
+                      hintTextDirection:TextDirection.rtl,
+           
+           suffixIcon: showPasswordIcon!
+      ? IconButton(
+          onPressed: onVisibilityPressed,
+          icon: Icon(
+            obsecureText!
+                ? Icons.visibility_off
+                : Icons.visibility,
+          ),
+        )
+      : null,
+          hintStyle: TextStyle(color:hintColor ?? Colors.black,
+          fontSize: 11,),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide:  BorderSide(color:bordercolor ?? kFontColor),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide:  BorderSide(color:bordercolor ?? kFontColor), 
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide:  BorderSide(color:kFontColor),
+          ),
         ),
       ),
     );
