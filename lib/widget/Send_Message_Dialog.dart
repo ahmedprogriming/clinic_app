@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SendMessageDialog extends StatefulWidget {
   final String patientName;
@@ -97,6 +98,35 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
     } catch (e) {
       if (mounted) {
         _showError('حدث خطأ أثناء فتح واتساب');
+      }
+    }
+  }
+
+  // ========================= // SMS // =========================
+  Future<void> _openSms() async {
+    final phone = _cleanPhoneNumber(widget.phone);
+    final message = messageController.text.trim();
+    if (phone.isEmpty) {
+      _showError('رقم الهاتف غير صحيح');
+      return;
+    }
+    try {
+      final bool? result = await _channel.invokeMethod<bool>('openSms', {
+        'phone': phone,
+        'message': message,
+      });
+      if (result != true && mounted) {
+        _showError('لا يوجد تطبيق رسائل متاح على الجهاز');
+      }
+    } on PlatformException catch (e) {
+      debugPrint('SMS Error: ${e.message}');
+      if (mounted) {
+        _showError('تعذر فتح تطبيق الرسائل');
+      }
+    } catch (e) {
+      debugPrint('SMS Error: $e');
+      if (mounted) {
+        _showError('حدث خطأ أثناء فتح الرسائل');
       }
     }
   }
@@ -385,33 +415,17 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                 // Buttons
                 Row(
                   children: [
+                    // WhatsAp
                     Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.close, size: 19),
-                        label: const Text('إلغاء'),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.grey.shade700,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      flex: 2,
                       child: ElevatedButton.icon(
                         onPressed: _openWhatsApp,
-                        icon: const Icon(
-                          Icons.chat_rounded,
+                        icon: const FaIcon(
+                          FontAwesomeIcons.whatsapp,
                           color: Colors.white,
+                          size: 20,
                         ),
                         label: const Text(
-                          'فتح واتساب',
+                          'واتساب',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -419,6 +433,34 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF25D366),
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+                    //smss
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: _openSms,
+                        icon: const Icon(
+                          Icons.sms_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        label: const Text(
+                          'SMS',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: darkGold,
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(

@@ -4,6 +4,7 @@ import 'package:clinic_app/screens/edit_data_patient_page.dart';
 import 'package:clinic_app/screens/login_page.dart';
 import 'package:clinic_app/screens/patients_page.dart';
 import 'package:clinic_app/screens/ragester_page.dart';
+import 'package:clinic_app/screens/sessions_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -28,7 +29,8 @@ class ClinicApp extends StatelessWidget {
       DashboardPage.id: (context) => const DashboardPage(),
       PatientsPage.id:(context) => const PatientsPage(),
       AddNewPatientPage.id:(context)=> const AddNewPatientPage(),
-      EditDataPatientPage.id:(context)=> const EditDataPatientPage()
+      EditDataPatientPage.id:(context)=> const EditDataPatientPage(),
+      SessionsPage.id:(context) => const SessionsPage()
        
       },
       initialRoute: DashboardPage.id,

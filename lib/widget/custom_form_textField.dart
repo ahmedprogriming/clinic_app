@@ -8,16 +8,17 @@ class CustomTextFiled extends StatelessWidget {
     this.maxLines = 1,
     this.onSave,
     this.onChanged,
-    this.initialValue, 
+    this.initialValue,
     this.textdecoration,
-    this.obsecureText=false, 
+    this.obsecureText = false,
     this.onVisibilityPressed,
-      this.showPasswordIcon=false,
-      this.width,
-      this.height,
-      this.hintColor,
-      this.bordercolor,
-      this.icon,
+    this.showPasswordIcon = false,
+    this.width,
+    this.height,
+    this.hintColor,
+    this.bordercolor,
+    this.icon,
+     this.fillcolor, this.fontsizehint,
   });
 
   final String? hint;
@@ -25,15 +26,17 @@ class CustomTextFiled extends StatelessWidget {
   final void Function(String?)? onSave;
   final void Function(String)? onChanged;
   final String? initialValue;
-  final TextDecoration? textdecoration; 
+  final TextDecoration? textdecoration;
   final bool? obsecureText;
   final VoidCallback? onVisibilityPressed;
-final bool? showPasswordIcon;
-final double? width;
+  final bool? showPasswordIcon;
+  final double? width;
   final double? height;
   final Color? hintColor;
   final Color? bordercolor;
   final IconData? icon;
+  final Color? fillcolor;
+  final double? fontsizehint;
 
   @override
   Widget build(BuildContext context) {
@@ -45,56 +48,49 @@ final double? width;
         onChanged: onChanged,
         onSaved: onSave,
         obscureText: obsecureText!,
-        
-        textDirection:textdecoration==TextDecoration.none?TextDirection.rtl:TextDirection.ltr,
-       
+
+        textDirection: textdecoration == TextDecoration.none
+            ? TextDirection.rtl
+            : TextDirection.ltr,
+
         validator: (value) {
-          if(value?.isEmpty ?? true)
-          {
+          if (value?.isEmpty ?? true) {
             return 'The filed is required';
-          }
-          else
-          {
+          } else {
             return null;
           }
         },
         cursorColor: kFontColor,
         //textAlign: TextAlign.center,
-          textAlignVertical: TextAlignVertical.center,
+        textAlignVertical: TextAlignVertical.center,
         maxLines: maxLines,
         decoration: InputDecoration(
+          filled: true,
+          fillColor:fillcolor??kPrimaryColor,
           hintText: hint,
-           prefixIcon: Icon(
-                       icon,
-                        color: Color(0xffC1AD94),
-                        size: 12,
-                     
-                      ),
-                      hintTextDirection:TextDirection.rtl,
-           
-           suffixIcon: showPasswordIcon!
-      ? IconButton(
-          onPressed: onVisibilityPressed,
-          icon: Icon(
-            obsecureText!
-                ? Icons.visibility_off
-                : Icons.visibility,
-          ),
-        )
-      : null,
-          hintStyle: TextStyle(color:hintColor ?? Colors.black,
-          fontSize: 11,),
+          prefixIcon: Icon(icon, color: Color(0xffC1AD94), size: 30),
+          hintTextDirection: TextDirection.rtl,
+
+          suffixIcon: showPasswordIcon!
+              ? IconButton(
+                  onPressed: onVisibilityPressed,
+                  icon: Icon(
+                    obsecureText! ? Icons.visibility_off : Icons.visibility,
+                  ),
+                )
+              : null,
+          hintStyle: TextStyle(color: hintColor ?? Colors.black, fontSize:fontsizehint?? 11),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide:  BorderSide(color:bordercolor ?? kFontColor),
+            borderSide: BorderSide(color: bordercolor ?? kFontColor),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide:  BorderSide(color:bordercolor ?? kFontColor), 
+            borderSide: BorderSide(color: bordercolor ?? kFontColor),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide:  BorderSide(color:kFontColor),
+            borderSide: BorderSide(color: kFontColor),
           ),
         ),
       ),

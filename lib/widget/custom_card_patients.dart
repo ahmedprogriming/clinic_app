@@ -1,5 +1,6 @@
 import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/screens/edit_data_patient_page.dart';
+import 'package:clinic_app/screens/sessions_page.dart';
 import 'package:clinic_app/widget/Send_Message_Dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -99,18 +100,23 @@ class CustomCardPatients extends StatelessWidget {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
-                              children: const [
-                                SizedBox(
-                                  width: 100,
-                                  height: 20,
-                                  child:const Text(
-                                    " قائمة الجلسات",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: kFontColor,
-                                      
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold
+                              children:  [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, SessionsPage.id);
+                                  },
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 20,
+                                    child:const Text(
+                                      " قائمة الجلسات",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: kFontColor,
+                                        
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -131,29 +137,27 @@ class CustomCardPatients extends StatelessWidget {
                               ),
                             ),
                     
-                            Container(
-                              height: 20,
-                              width: 100,
+                            Expanded(
                               child: IconButton(
                                 onPressed: ()
                                 {
                                   showDialog(
-      context: context,
-      builder: (context) {
-        return SendMessageDialog(
-          patientName: 'أحمد محمد',
-          phone: '+967780775168',
-          appointmentTime: '5:00 مساءً',
-        );
-      },
-    );
-  
+                                    context: context,
+                                    builder: (context) {
+                                      return SendMessageDialog(
+                                        patientName: 'أحمد محمد',
+                                        phone: '+967777123456',
+                                        appointmentTime: '5:00 مساءً',
+                                      );
+                                    },
+                                  );
+                                
                                 },
-                           icon: const  Icon(  Icons.chat,
+                                                         icon: const  Icon(  Icons.chat,
                               color:Color(0xFFD6A857),
                               size: 30,
                                )
-                                )
+                                ),
                             ),
                     
                            
