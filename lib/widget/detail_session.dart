@@ -229,17 +229,42 @@ class DetailSession extends StatelessWidget {
 
               SizedBox(height: 20),
 
-              Center(
-                child: SizedBox(
-                  width: 130,
-                  height: 45,
-                  child: CustomElevatedButton(
-                    icon: Icons.edit,
-                    backgroundcolor:darkGold ,
-                    text:  'تعديل الجلسة',
-                  ),
+              Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children:  [
+              SizedBox(
+                width: 160,
+                height: 55,
+                child: CustomElevatedButton(
+                  icon: Icons.edit,
+                  backgroundcolor: darkGold,
+                  text: 'تعديل الجلسة',
+                   onPressed: ()
+                   {
+                Navigator.pop(context);
+                   },
                 ),
               ),
+           const   SizedBox(width: 10),
+              SizedBox(
+                width: 160,
+                height: 55,
+                child: CustomElevatedButton(
+                  icon: Icons.delete,
+                  backgroundcolor: Colors.white,
+                  text: 'الغاء',
+                  textcolor: darkGold,
+                  borderColor:  const Color(0xffE9D9BD),
+                  iconColor: gold,
+                  onPressed: ()
+                   {
+                Navigator.pop(context);
+                   },
+                ),
+              ),
+            ],
+          ),
+       
 
               SizedBox(height: 20),
             ],
