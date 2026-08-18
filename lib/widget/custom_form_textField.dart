@@ -19,6 +19,8 @@ class CustomTextFiled extends StatelessWidget {
     this.bordercolor,
     this.icon,
      this.fillcolor, this.fontsizehint,
+       this.readonly=false,
+        this.onTap, this.controller,
   });
 
   final String? hint;
@@ -37,6 +39,9 @@ class CustomTextFiled extends StatelessWidget {
   final IconData? icon;
   final Color? fillcolor;
   final double? fontsizehint;
+  final bool readonly;
+  final void Function()? onTap;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +53,9 @@ class CustomTextFiled extends StatelessWidget {
         onChanged: onChanged,
         onSaved: onSave,
         obscureText: obsecureText!,
+        readOnly: readonly,
+        onTap: onTap,
+        controller:controller ,
 
         textDirection: textdecoration == TextDecoration.none
             ? TextDirection.rtl
@@ -68,7 +76,8 @@ class CustomTextFiled extends StatelessWidget {
           filled: true,
           fillColor:fillcolor??kPrimaryColor,
           hintText: hint,
-          prefixIcon: Icon(icon, color: Color(0xffC1AD94), size: 30),
+          
+          prefixIcon: Icon(icon, color: Color(0xffC1AD94), size: 20),
           hintTextDirection: TextDirection.rtl,
 
           suffixIcon: showPasswordIcon!

@@ -1,5 +1,7 @@
 import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/screens/details_session_page.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RecordsSessionPatient extends StatelessWidget {
   const RecordsSessionPatient({
@@ -7,70 +9,101 @@ class RecordsSessionPatient extends StatelessWidget {
     required this.textTop,
     required this.textbottom,
   });
+
   final String textTop;
   final String textbottom;
-  //final Color closeSession=Color(0xffF8ECE8);
-  //final Color waitSession=Color(0xffF3EDE0);
-  //final Color completSession=Color(0xffEDF4EC);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 90,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        border: Border.all(color: gold.withOpacity(0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 0.1),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Container(
+        width: double.infinity,
+        height: 110, // قللنا ارتفاع الكرت
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          border: Border.all(color: gold.withOpacity(0.2)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // السطر العلوي
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // حالة الجلسة
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: const Color(0xffEDF4EC),
+                  ),
+                  child: const Text('مكتملة', style: TextStyle(fontSize: 14)),
+                ),
+
+                // رقم الجلسة
                 Text(
                   textTop,
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 17,
                   ),
                 ),
-                 const SizedBox(width: 20),
-            
-                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Color(0xffEDF4EC)
-                  ),
-                  child: Text(' مكتملة'),
-                 )
               ],
             ),
-          ),
-          const SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.timeline_outlined, color: fontc),
-              const SizedBox(width: 5),
-              Text(textbottom, style: TextStyle(color: fontc)),
-            ],
-          ),
-          const SizedBox(height: 10),
-         
-        ],
+
+            // السطر السفلي
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // السهم
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () {
+                     Navigator.pushNamed(context, DetailsSessionPage.id);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Color(0xFFD6A857),
+                    size: 18,
+                  ),
+                ),
+
+                // التاريخ
+                Row(
+                  children: [
+                    Text(
+                      textbottom,
+                      style: TextStyle(color: fontc, fontSize: 14),
+                    ),
+
+                    const SizedBox(width: 5),
+                    const FaIcon(
+                          FontAwesomeIcons.clock,
+                          color:fontc,
+                          size: 16,
+                        ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

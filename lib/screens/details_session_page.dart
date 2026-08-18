@@ -1,11 +1,11 @@
 import 'package:clinic_app/constant.dart';
-import 'package:clinic_app/widget/list_session.dart';
+import 'package:clinic_app/widget/detail_session.dart';
 import 'package:flutter/material.dart';
 
-class SessionsPage extends StatelessWidget {
-  const SessionsPage({super.key});
+class DetailsSessionPage extends StatelessWidget {
+  const DetailsSessionPage({super.key});
+  static String id='DetailSessionPage';
 
-static String id='SessionPage';
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -13,7 +13,7 @@ static String id='SessionPage';
 
         appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        title:Text('قائمة جلسات المريض'
+        title:Text('تفاصيل الجلسة'
         ,style: TextStyle(color:Color(0xff8F6337),
         fontWeight: FontWeight.bold),) ,
         centerTitle: true,
@@ -33,7 +33,7 @@ static String id='SessionPage';
   ),
        
       ),
-      body:ListSession()
+      body:DetailSession()
     );
   }
 }

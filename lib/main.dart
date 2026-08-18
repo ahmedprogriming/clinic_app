@@ -1,5 +1,7 @@
 import 'package:clinic_app/screens/add_new_patient_page.dart';
+import 'package:clinic_app/screens/add_new_session_Page.dart';
 import 'package:clinic_app/screens/dashboard_page.dart';
+import 'package:clinic_app/screens/details_session_page.dart';
 import 'package:clinic_app/screens/edit_data_patient_page.dart';
 import 'package:clinic_app/screens/login_page.dart';
 import 'package:clinic_app/screens/patients_page.dart';
@@ -30,7 +32,9 @@ class ClinicApp extends StatelessWidget {
       PatientsPage.id:(context) => const PatientsPage(),
       AddNewPatientPage.id:(context)=> const AddNewPatientPage(),
       EditDataPatientPage.id:(context)=> const EditDataPatientPage(),
-      SessionsPage.id:(context) => const SessionsPage()
+      SessionsPage.id:(context) => const SessionsPage(),
+      DetailsSessionPage.id:(context) => const DetailsSessionPage(),
+      AddNewSessionPage.id:(context) => const AddNewSessionPage()
        
       },
       initialRoute: DashboardPage.id,
