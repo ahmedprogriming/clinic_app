@@ -118,6 +118,13 @@ class DetailSession extends StatelessWidget {
                           value: 'الظهر والكتفين',
                         ),
 
+                        
+                        SessionItem(
+                          icon: Icons.person,
+                          title: 'المعالج',
+                          value: 'الدكتور حسن',
+                        ),
+
                       ],
                     ),
                   ),

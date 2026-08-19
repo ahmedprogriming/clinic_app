@@ -183,6 +183,19 @@ class _AddNewSessionState extends State<AddNewSession> {
 
                     fillcolor: Colors.white,
                   ),
+
+                   const SizedBox(height: 15),
+                  CustomWidgetTitleElement(icon: Icons.person, text: 'المعالج'),
+                  const SizedBox(height: 15),
+                  CustomTextFiled(
+                    textdecoration: TextDecoration.none,
+                    bordercolor: Color(0xffE8DECC),
+
+                    hint: 'الدكتور حسن',
+                    hintColor: Colors.grey,
+
+                    fillcolor: Colors.white,
+                  ),
                 ],
               ),
             ),
