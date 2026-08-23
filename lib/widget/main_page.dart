@@ -1,4 +1,5 @@
 import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/screens/patients_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -162,17 +163,22 @@ class MainPage extends StatelessWidget {
                 // =====================
                 // PATIENTS CARD
                 // =====================
-                Expanded(
-                  child: _DashboardCard(
-                    title: "المرضى",
-                    number: "128",
-                    numberLabel: "مريض",
-                    subtitle: "إدارة بيانات المرضى",
-                    icon: Icons.people_outline_rounded,
-                    backgroundColor: Color(0xffB2935B),
-                    iconBackgroundColor: Colors.transparent,
-                    iconColor: Colors.white,
-                    textColor: Colors.white,
+                GestureDetector(
+                   onTap: () {
+                      Navigator.pushNamed(context, PatientsPage.id);
+                    },
+                  child: Expanded(
+                    child: _DashboardCard(
+                      title: "المرضى",
+                      number: "128",
+                      numberLabel: "مريض",
+                      subtitle: "إدارة بيانات المرضى",
+                      icon: Icons.people_outline_rounded,
+                      backgroundColor: Color(0xffB2935B),
+                      iconBackgroundColor: Colors.transparent,
+                      iconColor: Colors.white,
+                      textColor: Colors.white,
+                    ),
                   ),
                 ),
               ],

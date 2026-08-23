@@ -1,22 +1,41 @@
 import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/helper/custom_auth.dart';
+import 'package:clinic_app/helper/custom_showscanr.dart';
+import 'package:clinic_app/screens/dashboard_page.dart';
+import 'package:clinic_app/screens/login_page.dart';
 import 'package:clinic_app/widget/custom_button.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class RagesterPage extends StatelessWidget {
+class RagesterPage extends StatefulWidget {
   const RagesterPage({super.key});
 
-   static String id = 'RagesterPage';
+  static String id = 'RagesterPage';
 
   @override
+  State<RagesterPage> createState() => _RagesterPageState();
+}
+
+class _RagesterPageState extends State<RagesterPage> {
+  final GlobalKey<FormState> formKey = GlobalKey();
+  String? email;
+
+  String? password;
+
+  bool IsLoad = false;
+  @override
   Widget build(BuildContext context) {
-     return Scaffold(
-       backgroundColor: kPrimaryColor,
-      
+    return ModalProgressHUD(
+      inAsyncCall: IsLoad,
+      child: Scaffold(
+        backgroundColor: kPrimaryColor,
+
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
-            //key: formKey,
+            key: formKey,
             child: ListView(
               children: [
                 SizedBox(height: 40),
@@ -29,105 +48,125 @@ class RagesterPage extends StatelessWidget {
                       "انشاء حساب",
                       style: TextStyle(
                         fontSize: 32,
-                        color:kFontColor,
+                        color: kFontColor,
                         fontFamily: 'Pacifico',
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 40),
-                 CustomTextFiled(
+                CustomTextFiled(
                   hint: 'أسم المستخدم',
                   textdecoration: TextDecoration.none,
-                  /*onChange: (data) {
+                  onChange: (data) {
                     email = data;
                   },
-                  */
                 ),
-            
+
                 const SizedBox(height: 20),
                 CustomTextFiled(
                   hint: 'البريد الالكتروني',
-                  /*onChange: (data) {
+
+                  onChange: (data) {
                     email = data;
                   },
-                  */
                 ),
                 SizedBox(height: 15),
                 CustomTextFiled(
                   obsecureText: true,
                   hint: 'كلمة المرور',
-                  /*onChange: (data) {
+                  showPasswordIcon: true,
+                  onChange: (data) {
                     password = data;
                   },
-                  */
                 ),
-                  SizedBox(height: 15),
+                SizedBox(height: 15),
                 CustomTextFiled(
-                   obsecureText: true,
+                  obsecureText: true,
+                  showPasswordIcon: true,
                   hint: 'تأكيد كلمة المرور',
-                  /*onChange: (data) {
+                  onChange: (data) {
                     password = data;
                   },
-                  */
                 ),
                 SizedBox(height: 30),
-                CustomButton(
-              namebutton: 'تسجيل ',
-             /* onTap: () async {
-              if(formKey.currentState!.validate())
-                
-              {  IsLoad=true;
-              setState(() {
-                
-              });
-                 try {
-                  await registerUser();
-            
-                 Navigator.pushNamed(context, ChatPage.id,arguments: email);
-                 
-                } on FirebaseAuthException catch (ex) {
-                  if (ex.code == 'weak-password') {
-             ShowSnackbar(context,'The password provided is too weak, please try again.');
-                  
-                  } else if (ex.code == 'email-already-in-use') {
-             ShowSnackbar(context,'The account already exists for that email.');
-                   
-                  }
-                   else {
-             ShowSnackbar(context,ex.message ?? ex.code);
-                  
-                  }
-                }catch(ex)
-                  {
-                     ShowSnackbar(context,'There was an error.');
-                  }
-                  IsLoad=false;
 
-                  setState(() {
-                    
-                  });
-              }
-              }
-              */
-            ),
+                CustomButton(
+                  namebutton: 'تسجيل ',
+                  onTap: () async {
+                    if (formKey.currentState!.validate()) {
+                      IsLoad = true;
+                      setState(() {});
+                      try {
+                        await LoginAuth(email!, password);
+
+                        Navigator.pushNamed(
+                          context,
+                          DashboardPage.id,
+                          arguments: email,
+                        );
+                      } on FirebaseAuthException catch (ex) {
+                        if (ex.code == 'weak-password') {
+                          ShowSnackbar(
+                            context,
+                            'كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى.',
+                          );
+                        } else if (ex.code == 'email-already-in-use') {
+                          ShowSnackbar(
+                            context,
+                            'هذا البريد الإلكتروني مسجل بالفعل، يرجى استخدام بريد آخر.',
+                          );
+                        } else if (ex.code == 'invalid-email') {
+                          ShowSnackbar(
+                            context,
+                            'البريد الإلكتروني غير صحيح، يرجى التأكد منه.',
+                          );
+                        } else if (ex.code == 'operation-not-allowed') {
+                          ShowSnackbar(
+                            context,
+                            'إنشاء الحساب بهذا النوع من تسجيل الدخول غير مفعل.',
+                          );
+                        } else if (ex.code == 'network-request-failed') {
+                          ShowSnackbar(
+                            context,
+                            'حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة مرة أخرى.',
+                          );
+                        } else {
+                          ShowSnackbar(context, ex.message ?? ex.code);
+                        }
+                      } catch (ex) {
+                        ShowSnackbar(context, 'حدث خطأ، حاول مرة أخرى');
+                      }
+                      IsLoad = false;
+
+                      setState(() {});
+                    }
+                  },
+                ),
+
                 SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, 'LoginPage');
-                      },
-                      child: Text(
-                      'تسجيل الدخول',
-                        style: TextStyle(color:kFontColor, fontWeight: FontWeight.bold ),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, LoginPage.id);
+                        },
+                        child: Text(
+                          'تسجيل الدخول',
+                          style: TextStyle(
+                            color: kFontColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     Text(
-                       'هل لديك حساب بالفعل؟',
-                     
-                      style: TextStyle(color:Colors.black87),
+                      'هل لديك حساب بالفعل؟',
+
+                      style: TextStyle(color: Colors.black87),
                     ),
                   ],
                 ),
@@ -136,6 +175,7 @@ class RagesterPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
     );
   }
 }

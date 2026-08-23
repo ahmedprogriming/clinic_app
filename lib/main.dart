@@ -39,7 +39,7 @@ class ClinicApp extends StatelessWidget {
       EditSessionPage.id:(context) => const EditSessionPage()
        
       },
-      initialRoute: DashboardPage.id,
+      initialRoute: RagesterPage.id,
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor:Color(0xffFDF9F1)
