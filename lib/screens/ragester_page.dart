@@ -23,6 +23,8 @@ class _RagesterPageState extends State<RagesterPage> {
   String? email;
 
   String? password;
+  String? confirmPassword;
+  String? username;
 
   bool IsLoad = false;
   @override
@@ -59,7 +61,7 @@ class _RagesterPageState extends State<RagesterPage> {
                   hint: 'أسم المستخدم',
                   textdecoration: TextDecoration.none,
                   onChange: (data) {
-                    email = data;
+                    username = data;
                   },
                 ),
 
@@ -86,7 +88,7 @@ class _RagesterPageState extends State<RagesterPage> {
                   showPasswordIcon: true,
                   hint: 'تأكيد كلمة المرور',
                   onChange: (data) {
-                    password = data;
+                    confirmPassword = data;
                   },
                 ),
                 SizedBox(height: 30),
@@ -97,8 +99,14 @@ class _RagesterPageState extends State<RagesterPage> {
                     if (formKey.currentState!.validate()) {
                       IsLoad = true;
                       setState(() {});
+                      if (password != confirmPassword) {
+                        ShowSnackbar(context, 'كلمتا المرور غير متطابقتين');
+                           IsLoad = false;
+                      setState(() {});
+                        return;
+                      }
                       try {
-                        await LoginAuth(email!, password);
+                        await RegesterUser(email!, password!, username!);
 
                         Navigator.pushNamed(
                           context,

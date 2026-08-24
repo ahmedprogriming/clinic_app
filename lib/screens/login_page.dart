@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                       IsLoad = true;
                       setState(() {});
                       try {
-                        await LoginAuth(email!, password);
+                        await LoginAuth(email!, password!);
 
                         Navigator.pushNamed(
                           context,
