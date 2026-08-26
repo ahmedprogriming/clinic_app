@@ -13,24 +13,30 @@ class PatientsCubit extends Cubit<PatientsState> {
       .snapshots();
   List<PatientsModel> patientsList = [];
   List<PatientsModel> filteredPatients = [];
-  getpatients() {
+  void getpatients() {
     emit(PatientsLoding());
-    try {
-      patientsDB.listen((event) {
+
+    patientsDB.listen(
+      (event) {
         patientsList.clear();
         for (var doc in event.docs) {
           patientsList.add(PatientsModel.fromJson(doc));
         }
 
-        if (event.docs.isEmpty) {
-          emit(PatientsFailure(errMessage: ' لا توجد بيانات'));
+        if (patientsList.isEmpty) {
+          emit(PatientsFailure(errMessage: 'لا توجد بيانات'));
         } else {
           emit(PatientsSuccess(patientsList: patientsList));
         }
-      });
-    } on Exception catch (e) {
-      emit(PatientsFailure(errMessage: ' حدث خطأ أثناء معالجة البيانات'));
-    }
+      },
+      onError: (error) {
+        emit(
+          PatientsFailure(
+            errMessage: 'خطأ أثناء معالجة البيانات: ${error.toString()}',
+          ),
+        );
+      },
+    );
   }
 
   void searchPatients(String query) {
@@ -48,14 +54,14 @@ class PatientsCubit extends Cubit<PatientsState> {
   }
 
   void filterByGender(String? gender) {
-  if (gender == null) {
-    filteredPatients = patientsList;
-  } else {
-    filteredPatients = patientsList.where((patient) {
-      return patient.gandar == gender;
-    }).toList();
-  }
+    if (gender == null) {
+      filteredPatients = patientsList;
+    } else {
+      filteredPatients = patientsList.where((patient) {
+        return patient.gandar == gender;
+      }).toList();
+    }
 
-emit(PatientsSuccess(patientsList: filteredPatients));
-}
+    emit(PatientsSuccess(patientsList: filteredPatients));
+  }
 }

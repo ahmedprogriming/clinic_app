@@ -163,27 +163,35 @@ class MainPage extends StatelessWidget {
                 // =====================
                 // PATIENTS CARD
                 // =====================
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                    
-                      Navigator.pushNamed(context, PatientsPage.id);
-                    },
-                    child: _DashboardCard(
-                      title: "المرضى",
-                      number: (BlocProvider.of<PatientsCubit>(
-                        context,
-                      ).patientsList.length).toString(),
-                      numberLabel: "مريض",
-                      subtitle: "إدارة بيانات المرضى",
-                      icon: Icons.people_outline_rounded,
-                      backgroundColor: Color(0xffB2935B),
-                      iconBackgroundColor: Colors.transparent,
-                      iconColor: Colors.white,
-                      textColor: Colors.white,
-                    ),
-                  ),
-                ),
+                
+              
+                     Expanded(
+                      child: BlocBuilder<PatientsCubit,PatientsState>(
+                        builder: (context,state)
+                        {
+                          final cubit = BlocProvider.of<PatientsCubit>(context);
+                            return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, PatientsPage.id);
+                          },
+                          child: _DashboardCard(
+                            title: "المرضى",
+                            number: cubit.patientsList.length.toString(),
+                            numberLabel: "مريض",
+                            subtitle: "إدارة بيانات المرضى",
+                            icon: Icons.people_outline_rounded,
+                            backgroundColor: Color(0xffB2935B),
+                            iconBackgroundColor: Colors.transparent,
+                            iconColor: Colors.white,
+                            textColor: Colors.white,
+                          ),
+                        );
+                        },
+                        
+                      ),
+                    )
+                  
+                
               ],
             ),
 

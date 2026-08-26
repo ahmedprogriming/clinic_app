@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListPatients extends StatelessWidget {
-  List<PatientsModel> patientsList = [];
+
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class ListPatients extends StatelessWidget {
                   return Center(child: Text(state.errMessage));
 
                 case PatientsSuccess():
-                  patientsList = state.patientsList;
+                 final patientsList = state.patientsList;
 
                   return ListView.builder(
                     itemCount: patientsList.length,
