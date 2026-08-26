@@ -1,11 +1,14 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/model/patients_model.dart';
+import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/widget/custom_button.dart';
 import 'package:clinic_app/widget/custom_card_patients.dart';
 import 'package:flutter/material.dart';
 
-class ListPatients extends StatelessWidget {
-  const ListPatients({super.key});
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+class ListPatients extends StatelessWidget {
+  List<PatientsModel> patientsList = [];
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +21,11 @@ class ListPatients extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 4),
                 child: Directionality(
                   textDirection: TextDirection.rtl,
-                  child: TextFormField(      
+                  child: TextFormField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      context.read<PatientsCubit>().searchPatients(value);
+                    },
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
                         return 'The field is required';
@@ -27,7 +34,7 @@ class ListPatients extends StatelessWidget {
                       }
                     },
                     cursorColor: Colors.black,
-                        
+
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
@@ -35,16 +42,11 @@ class ListPatients extends StatelessWidget {
                         horizontal: 16,
                       ),
                       hintText: 'ابحث عن اسم المريض',
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Color(0xff999896),
-                     
-                      ),
-                        
+                      prefixIcon: Icon(Icons.search, color: Color(0xff999896)),
+
                       hintStyle: const TextStyle(
                         color: Color(0xff999896),
                         fontSize: 12,
-                       
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -73,26 +75,88 @@ class ListPatients extends StatelessWidget {
                   buttonColor: Color(0xffFDF9F1),
                   borderColor: Color(0xffEBE7E4),
                   namebutton: 'بحث',
-                 icon: Icon(Icons.tune, size: 24, color: Color(0xff8D734B)),
-                  onTap: () {},
+                  icon: Icon(Icons.tune, size: 24, color: Color(0xff8D734B)),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.people),
+                              title: const Text('الكل'),
+                              onTap: () {
+                                context.read<PatientsCubit>().filterByGender(
+                                  null,
+                                );
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.male),
+                              title: const Text('ذكر'),
+                              onTap: () {
+                                context.read<PatientsCubit>().filterByGender(
+                                  'ذكر',
+                                );
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ListTile(
+                              leading: const Icon(Icons.female),
+                              title: const Text('أنثى'),
+                              onTap: () {
+                                context.read<PatientsCubit>().filterByGender(
+                                  'أنثى',
+                                );
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 20),
-    
+
         Expanded(
-          child: ListView.builder(
-            itemCount: 10, // Replace with the actual number of patients
-            itemBuilder: (context, index) {
-              return CustomCardPatients(
-                patientName:
-                    'Patient ${index + 1}', // Replace with actual patient name
-                onTap: () {
-                  // Handle card tap, e.g., navigate to patient details page
-                },
-              );
+          child: BlocBuilder<PatientsCubit, PatientsState>(
+            builder: (context, state) {
+              switch (state) {
+                case PatientsInitial():
+                  return const Center(child: CircularProgressIndicator());
+
+                case PatientsLoding():
+                  return const Center(child: CircularProgressIndicator());
+
+                case PatientsFailure():
+                  return Center(child: Text(state.errMessage));
+
+                case PatientsSuccess():
+                  patientsList = state.patientsList;
+
+                  return ListView.builder(
+                    itemCount: patientsList.length,
+                    itemBuilder: (context, index) {
+                      final patient = patientsList[index];
+
+                      return CustomCardPatients(
+                        patientName: patient.patientaname ?? '',
+                        age: patient.age ?? 0,
+                        numberphone: patient.numberPhone ?? '',
+                        onTap: () {
+                          print('Patient ID: ${patient.patientaname}');
+                        },
+                      );
+                    },
+                  );
+              }
             },
           ),
         ),

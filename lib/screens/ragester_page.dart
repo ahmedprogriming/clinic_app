@@ -1,12 +1,14 @@
 import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_auth.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
+import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/dashboard_page.dart';
 import 'package:clinic_app/screens/login_page.dart';
 import 'package:clinic_app/widget/custom_button.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RagesterPage extends StatefulWidget {
@@ -101,13 +103,13 @@ class _RagesterPageState extends State<RagesterPage> {
                       setState(() {});
                       if (password != confirmPassword) {
                         ShowSnackbar(context, 'كلمتا المرور غير متطابقتين');
-                           IsLoad = false;
-                      setState(() {});
+                        IsLoad = false;
+                        setState(() {});
                         return;
                       }
                       try {
                         await RegesterUser(email!, password!, username!);
-
+                        BlocProvider.of<PatientsCubit>(context).getpatients();
                         Navigator.pushNamed(
                           context,
                           DashboardPage.id,
@@ -178,7 +180,7 @@ class _RagesterPageState extends State<RagesterPage> {
                     ),
                   ],
                 ),
-                Spacer(flex: 3),
+                //  Spacer(flex: 3),
               ],
             ),
           ),

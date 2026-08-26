@@ -7,3 +7,4 @@ const kFontColor=Color(0xff8F6337);
   const Color cream =  Color(0xFFFAF7F1);
   const Color fontc =  Color(0xffBA8554);
   const kusersCollection="Users";
+  const kPatientsCollection='Patienst';

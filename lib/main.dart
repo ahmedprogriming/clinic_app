@@ -1,6 +1,7 @@
 import 'package:clinic_app/screens/add_new_patient_page.dart';
 import 'package:clinic_app/screens/add_new_session_Page.dart';
 import 'package:clinic_app/screens/cubits/login_cubit/login_cubit.dart';
+import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/dashboard_page.dart';
 import 'package:clinic_app/screens/details_session_page.dart';
 import 'package:clinic_app/screens/edit_data_patient_page.dart';
@@ -25,8 +26,11 @@ class ClinicApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginCubit(),
+    return MultiBlocProvider(
+      providers:[
+        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => PatientsCubit())
+      ] ,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {

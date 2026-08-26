@@ -51,7 +51,7 @@ class _DashboardCard extends StatelessWidget {
             ],
           ),
 
-          const Spacer(),
+  
 
           Text(
             title,

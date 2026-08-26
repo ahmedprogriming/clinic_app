@@ -1,11 +1,11 @@
 import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/patients_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +51,14 @@ class MainPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10),
-                
+
                     Text(
                       "نظام إدارة العيادة",
                       style: TextStyle(fontSize: 14, color: fontc),
                     ),
-                
+
                     const SizedBox(height: 4),
-                
+
                     const Text(
                       "عيادة الحجامة والمساج",
                       style: TextStyle(
@@ -144,7 +144,7 @@ class MainPage extends StatelessWidget {
                 // =====================
                 // APPOINTMENTS CARD
                 // =====================
-              /*  Expanded(
+                /*  Expanded(
                   child: _DashboardCard(
                     title: "المواعيد",
                     number: "8",
@@ -163,14 +163,17 @@ class MainPage extends StatelessWidget {
                 // =====================
                 // PATIENTS CARD
                 // =====================
-                GestureDetector(
-                   onTap: () {
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                    
                       Navigator.pushNamed(context, PatientsPage.id);
                     },
-                  child: Expanded(
                     child: _DashboardCard(
                       title: "المرضى",
-                      number: "128",
+                      number: (BlocProvider.of<PatientsCubit>(
+                        context,
+                      ).patientsList.length).toString(),
                       numberLabel: "مريض",
                       subtitle: "إدارة بيانات المرضى",
                       icon: Icons.people_outline_rounded,
@@ -242,8 +245,6 @@ class _DashboardCard extends StatelessWidget {
               ),
             ],
           ),
-
-          const Spacer(),
 
           Text(
             title,

@@ -4,9 +4,18 @@ import 'package:clinic_app/screens/sessions_page.dart';
 import 'package:clinic_app/widget/Send_Message_Dialog.dart';
 import 'package:flutter/material.dart';
 
+
 class CustomCardPatients extends StatelessWidget {
-  const CustomCardPatients({super.key, required this.patientName, this.onTap});
+  const CustomCardPatients({
+    super.key,
+    required this.patientName,
+    this.onTap,
+    required this.numberphone,
+    required this.age,
+  });
   final String patientName;
+  final String numberphone;
+  final int age;
 
   final void Function()? onTap;
   @override
@@ -43,16 +52,16 @@ class CustomCardPatients extends StatelessWidget {
                             "lib/assets/images/icons8-avatar-50.png",
                           ),
                         ),
-                    
+
                         const SizedBox(width: 16),
                         //date patient
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                    
+
                             children: [
-                              const Text(
-                                "احمد خالد عوض جيود",
+                               Text(
+                                patientName,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
@@ -60,34 +69,37 @@ class CustomCardPatients extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 14),
-                    
+
                               Row(
-                                children: const [
-                                  Icon(Icons.phone, size: 12, color: Colors.green),
-                                  SizedBox(width: 5),
+                                children:  [
+                                const  Icon(
+                                    Icons.phone,
+                                    size: 12,
+                                    color: Colors.green,
+                                  ),
+                                 const SizedBox(width: 5),
                                   Text(
-                                    "782222222",
+                                    "967$numberphone+",
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                   
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 14),
-                    
+
                               Row(
-                                children: const [
-                                  Icon(
+                                children:  [
+                                const  Icon(
                                     Icons.cake_outlined,
                                     size: 12,
-                                    color:  kFontColor,
+                                    color: kFontColor,
                                   ),
-                                  SizedBox(width: 5),
+                                const  SizedBox(width: 5),
                                   Text(
-                                    "30 Years",
+                                    "$age سنة",
                                     style: TextStyle(fontSize: 12),
                                   ),
                                 ],
@@ -100,22 +112,25 @@ class CustomCardPatients extends StatelessWidget {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
-                              children:  [
+                              children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(context, SessionsPage.id);
+                                    Navigator.pushNamed(
+                                      context,
+                                      SessionsPage.id,
+                                    );
                                   },
                                   child: SizedBox(
                                     width: 100,
                                     height: 20,
-                                    child:const Text(
+                                    child: const Text(
                                       " قائمة الجلسات",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: kFontColor,
-                                        
+
                                         fontSize: 14,
-                                        fontWeight: FontWeight.bold
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
@@ -123,7 +138,7 @@ class CustomCardPatients extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 30),
-                    
+
                             Container(
                               width: 100,
                               child: const Text(
@@ -132,55 +147,53 @@ class CustomCardPatients extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
-                                   fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                    
+
                             Expanded(
                               child: IconButton(
-                                onPressed: ()
-                                {
+                                onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
                                       return SendMessageDialog(
-                                        patientName: 'أحمد محمد',
-                                        phone: '+967777123456',
+                                        patientName: patientName,
+                                        phone: '+967$numberphone',
                                         appointmentTime: '5:00 مساءً',
                                       );
                                     },
                                   );
-                                
                                 },
-                                                         icon: const  Icon(  Icons.chat,
-                              color:Color(0xFFD6A857),
-                              size: 30,
-                               )
+                                icon: const Icon(
+                                  Icons.chat,
+                                  color: Color(0xFFD6A857),
+                                  size: 30,
                                 ),
+                              ),
                             ),
-                    
-                           
-                    
                           ],
                         ),
-                    
+
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                           
-                                IconButton(
-                                onPressed: ()
-                                {
-                                  Navigator.pushNamed(context, EditDataPatientPage.id);
-                                },
-                           icon: const  Icon(   Icons.arrow_forward_ios,
-                              color:Color(0xFFD6A857),
-                              size: 18,
-                               )
-                                )
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  EditDataPatientPage.id,
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color(0xFFD6A857),
+                                size: 18,
+                              ),
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),

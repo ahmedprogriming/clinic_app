@@ -2,6 +2,7 @@ import 'package:clinic_app/constant.dart';
 
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/login_cubit/login_cubit.dart';
+import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/dashboard_page.dart';
 import 'package:clinic_app/screens/ragester_page.dart';
 import 'package:clinic_app/widget/custom_button.dart';
@@ -27,6 +28,7 @@ class LoginPage extends StatelessWidget {
         if (state is LoginLoading) {
           isLoad = true;
         } else if (state is LoginSuccess) {
+            BlocProvider.of<PatientsCubit>(context).getpatients();
           Navigator.pushNamed(context, DashboardPage.id, arguments: email);
           isLoad = false;
         } else if (state is LoginFailure) {
