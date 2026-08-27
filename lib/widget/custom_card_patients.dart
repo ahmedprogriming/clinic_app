@@ -11,11 +11,12 @@ class CustomCardPatients extends StatelessWidget {
     required this.patientName,
     this.onTap,
     required this.numberphone,
-    required this.age,
+    required this.age, required this.docId,
   });
   final String patientName;
   final String numberphone;
   final int age;
+  final String docId;
 
   final void Function()? onTap;
   @override
@@ -184,6 +185,7 @@ class CustomCardPatients extends StatelessWidget {
                                 Navigator.pushNamed(
                                   context,
                                   EditDataPatientPage.id,
+                                  arguments: docId
                                 );
                               },
                               icon: const Icon(

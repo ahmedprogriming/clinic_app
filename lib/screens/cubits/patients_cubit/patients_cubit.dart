@@ -20,7 +20,7 @@ class PatientsCubit extends Cubit<PatientsState> {
       (event) {
         patientsList.clear();
         for (var doc in event.docs) {
-          patientsList.add(PatientsModel.fromJson(doc));
+          patientsList.add(PatientsModel.fromJson(doc,doc.id));
         }
 
         if (patientsList.isEmpty) {

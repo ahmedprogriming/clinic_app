@@ -4,8 +4,10 @@
   final String gandar;
   final int age;
   final String address;
+  final String? docId;
 
   PatientsModel({
+    this.docId,
     required this.patientaname,
     required this.numberPhone,
     required this.gandar,
@@ -13,8 +15,9 @@
     required this.address,
   });
 
-  factory PatientsModel.fromJson(jsonData) {
+  factory PatientsModel.fromJson(jsonData,String id) {
     return PatientsModel(
+      docId: id,
       patientaname: jsonData['patientname'],
       numberPhone: jsonData['numberphone'],
       gandar: jsonData['gander'],

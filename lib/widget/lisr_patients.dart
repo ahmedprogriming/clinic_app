@@ -150,6 +150,7 @@ class ListPatients extends StatelessWidget {
                         patientName: patient.patientaname ?? '',
                         age: patient.age ?? 0,
                         numberphone: patient.numberPhone ?? '',
+                        docId:patient.docId!,
                         onTap: () {
                           print('Patient ID: ${patient.patientaname}');
                         },
