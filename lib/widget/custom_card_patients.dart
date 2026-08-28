@@ -119,6 +119,7 @@ class CustomCardPatients extends StatelessWidget {
                                     Navigator.pushNamed(
                                       context,
                                       SessionsPage.id,
+                                      arguments: docId
                                     );
                                   },
                                   child: SizedBox(

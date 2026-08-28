@@ -8,6 +8,7 @@ class SessionsPage extends StatelessWidget {
 static String id='SessionPage';
   @override
   Widget build(BuildContext context) {
+    final String docId = ModalRoute.of(context)!.settings.arguments as String;
     return  Scaffold(
        backgroundColor: kPrimaryColor,
 
@@ -33,7 +34,7 @@ static String id='SessionPage';
   ),
        
       ),
-      body:ListSession()
+      body:ListSession(docId: docId,)
     );
   }
 }

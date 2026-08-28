@@ -8,10 +8,12 @@ class RecordsSessionPatient extends StatelessWidget {
     super.key,
     required this.textTop,
     required this.textbottom,
+    required this.state,
   });
 
   final String textTop;
   final String textbottom;
+  final String state;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +51,9 @@ class RecordsSessionPatient extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: const Color(0xffEDF4EC),
+                    color: selectcolorcontanerState(state),
                   ),
-                  child: const Text('مكتملة', style: TextStyle(fontSize: 14)),
+                  child: Text(state, style: TextStyle(fontSize: 14)),
                 ),
 
                 // رقم الجلسة
@@ -75,7 +77,7 @@ class RecordsSessionPatient extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
-                     Navigator.pushNamed(context, DetailsSessionPage.id);
+                    Navigator.pushNamed(context, DetailsSessionPage.id);
                   },
                   icon: const Icon(
                     Icons.arrow_back,
@@ -94,10 +96,10 @@ class RecordsSessionPatient extends StatelessWidget {
 
                     const SizedBox(width: 5),
                     const FaIcon(
-                          FontAwesomeIcons.clock,
-                          color:fontc,
-                          size: 16,
-                        ),
+                      FontAwesomeIcons.clock,
+                      color: fontc,
+                      size: 16,
+                    ),
                   ],
                 ),
               ],
@@ -106,5 +108,17 @@ class RecordsSessionPatient extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color selectcolorcontanerState(String state) {
+    switch (state) {
+      case 'مكتملة':
+        return const Color(0xffEDF4EC);
+      case 'قادمة':
+        return const Color.fromARGB(255, 239, 224, 193);
+      case 'ملغاة':
+        return const Color.fromARGB(255, 239, 180, 180);
+    }
+    return const Color.fromARGB(255, 242, 244, 241);
   }
 }
