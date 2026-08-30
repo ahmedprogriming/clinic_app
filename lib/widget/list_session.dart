@@ -24,52 +24,79 @@ class ListSession extends StatefulWidget {
 class _ListSessionState extends State<ListSession> {
   String namePatient = '';
   String phonenum = '';
-   
 
-  List<SessionModel> sessionsDate=[];
+  List<SessionModel> sessionsDate = [];
   @override
   void initState() {
     super.initState();
 
     // جلب البيانات عند فتح الشاشة
     context.read<EditPatientCubit>().getPatientData(widget.docId);
-     context.read<SessionlistCubit>().getSessionsData(widget.docId);
+    context.read<SessionlistCubit>().getSessionsData(widget.docId);
   }
 
   String _formatTimestampShorts(dynamic timestamp) {
     if (timestamp == null) return 'غير محدد';
     DateTime date = timestamp.toDate();
     const List<String> arabicMonths = [
-    'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-  ];
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ];
 
-  String monthName = arabicMonths[date.month - 1];
+    String monthName = arabicMonths[date.month - 1];
     return '${date.day}/ ${monthName} /${date.year}';
   }
 
   // تنسيق التاريخ المستخرج من Firestore
   String _formatTimestamp(dynamic timestamp) {
     if (timestamp == null) return 'غير محدد';
-  
-  DateTime date = timestamp.toDate();
 
-  // مصفوفة بأسماء الأشهر العربية
-  const List<String> arabicMonths = [
-    'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-  ];
+    DateTime date = timestamp.toDate();
 
-  String monthName = arabicMonths[date.month - 1];
+    // مصفوفة بأسماء الأشهر العربية
+    const List<String> arabicMonths = [
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ];
 
-  // تحويل نظام 24 ساعة إلى 12 ساعة مع تحديد الفترة
-  int hour12 = date.hour % 12;
-  if (hour12 == 0) hour12 = 12; // معالجة منتصف الليل والظهيرة
-  
-  String period = date.hour >= 12 ? 'مساءً' : 'صباحاً';
-  String minute = date.minute.toString().padLeft(2, '0');
+    String monthName = arabicMonths[date.month - 1];
 
-  return '$monthName ${date.day} — ${date.year} — $hour12:$minute $period';
+    // تحويل نظام 24 ساعة إلى 12 ساعة مع تحديد الفترة
+    int hour12 = date.hour % 12;
+    if (hour12 == 0) hour12 = 12; // معالجة منتصف الليل والظهيرة
+
+    String period = date.hour >= 12 ? 'مساءً' : 'صباحاً';
+    String minute = date.minute.toString().padLeft(2, '0');
+
+    return '$monthName ${date.day} — ${date.year} — $hour12:$minute $period';
+  }
+
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,16 +104,29 @@ class _ListSessionState extends State<ListSession> {
     return BlocConsumer<SessionlistCubit, SessionlistState>(
       listener: (context, state) {
         // TODO: implement listener
-        if(state is SessionlistSuccess)
-        {
-          sessionsDate=state.sessionsList;
+        if (state is SessionlistSuccess) {
+          sessionsDate = state.sessionsList;
         }
-        if(state is SessionlistFailure)
-        {
+        if (state is SessionlistFailure) {
           ShowSnackbar(context, state.erroMessage);
         }
       },
       builder: (context, state) {
+        // استخراج أول جلسة حالتها "قادمة"
+        final upcomingSession = sessionsDate.cast<SessionModel?>().firstWhere(
+          (s) => s?.state == 'قادمة',
+          orElse: () => null,
+        );
+
+        // استخراج أول جلسة حالتها "مكتملة"
+        final completSession = sessionsDate.cast<SessionModel?>().firstWhere(
+          (s) => s?.state == 'مكتملة',
+          orElse: () => null,
+        );
+
+        final displaySessions = state is SessionlistSuccess
+            ? state.filteredSessionsList
+            : <SessionModel>[];
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Stack(
@@ -115,6 +155,7 @@ class _ListSessionState extends State<ListSession> {
                       if (isLoading && namePatient.isEmpty) {
                         return const Center(child: CircularProgressIndicator());
                       }
+
                       return Container(
                         margin: const EdgeInsets.all(15),
                         padding: const EdgeInsets.all(14),
@@ -231,8 +272,10 @@ class _ListSessionState extends State<ListSession> {
                         Expanded(
                           child: Custom_small_contaner(
                             textTop: 'آخر جلسة',
-                            textbottom: sessionsDate.isNotEmpty
-                                ? _formatTimestampShorts(sessionsDate.first.date)
+                            textbottom:
+                                completSession != null &&
+                                    completSession.date != null
+                                ? _formatTimestampShorts(completSession.date)
                                 : 'لا يوجد',
                             icon: const Icon(Icons.edit_calendar_sharp),
                           ),
@@ -241,7 +284,11 @@ class _ListSessionState extends State<ListSession> {
                         Expanded(
                           child: Custom_small_contaner(
                             textTop: 'الجلسة القادمة',
-                            textbottom: 'قيد التحديد',
+                            textbottom:
+                                upcomingSession != null &&
+                                    upcomingSession.date != null
+                                ? _formatTimestampShorts(upcomingSession.date)
+                                : 'لا توجد',
                             icon: const Icon(Icons.hourglass_empty),
                           ),
                         ),
@@ -254,13 +301,16 @@ class _ListSessionState extends State<ListSession> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: CustomTextFiled(
                       hint: 'البحث في الجلسات...',
-
+                      controller: searchController,
                       hintColor: Colors.grey,
                       fontsizehint: 16,
                       icon: Icons.search,
                       fillcolor: Colors.white,
                       bordercolor: const Color(0xffE8DECC),
                       textdecoration: TextDecoration.none,
+                      onChange: (query) {
+                        context.read<SessionlistCubit>().searchSessions(query);
+                      },
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -277,38 +327,39 @@ class _ListSessionState extends State<ListSession> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
                   // ========================= // الجلسات // =========================
-                  if (SessionlistState is SessionlistLoading)
+                  if (state is SessionlistLoading)
                     const Center(
                       child: Padding(
                         padding: EdgeInsets.all(20),
                         child: CircularProgressIndicator(),
                       ),
                     )
-                  else if (sessionsDate.isEmpty)
+                  else if (displaySessions.isEmpty)
                     const Center(
                       child: Padding(
                         padding: EdgeInsets.all(20),
                         child: Text(
-                          'لا توجد جلسات مسجلة لهذا المريض',
+                          'لا توجد جلسات مسجلة تطابق بحثك',
                           style: TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                       ),
                     )
                   else
-                  ...sessionsDate.map((session) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 6,
-                      ),
-                      child: RecordsSessionPatient(
-                        textTop: 'الجلسة# ${session.numberSession}',
-                        textbottom: '${_formatTimestamp(session.date)}',
-                        state: session.state,
-                      ),
-                    );
-                  }),
+                    ...displaySessions.map((session) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 6,
+                        ),
+                        child: RecordsSessionPatient(
+                          textTop: 'الجلسة# ${session.numberSession}',
+                          textbottom: '${_formatTimestamp(session.date)}',
+                          state: session.state,
+                        ),
+                      );
+                    }),
                 ],
               ),
 
@@ -323,7 +374,11 @@ class _ListSessionState extends State<ListSession> {
                     backgroundcolor: darkGold,
                     text: 'إضافة جلسة',
                     onPressed: () {
-                      Navigator.pushNamed(context, AddNewSessionPage.id);
+                      Navigator.pushNamed(
+                        context,
+                        AddNewSessionPage.id,
+                        arguments: widget.docId,
+                      );
                     },
                   ),
                 ),
