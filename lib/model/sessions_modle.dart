@@ -11,6 +11,7 @@ class SessionModel {
   final int numberSession;
   final String type;
   final String nameDoctor;
+  final String? places;
 
   SessionModel({
     required this.docId,
@@ -22,7 +23,8 @@ class SessionModel {
     required this.numberSession,
     required this.type,
     required this.nameDoctor,
-    this.time
+    this.time,
+     this.places
   });
 
   // لتحويل المستند القادم من Firestore إلى كائن
@@ -50,6 +52,7 @@ class SessionModel {
       type: data['type'] ?? '',
       nameDoctor: data['doctorName'],
      time: data['time'],
+     places: data['places'],
     );
   }
 

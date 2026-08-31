@@ -46,13 +46,15 @@ class CustomCardPatients extends StatelessWidget {
                     child: Row(
                       children: [
                         // صورة المريض
-                        const CircleAvatar(
-                          radius: 35,
-                          backgroundColor: Colors.white,
-                          backgroundImage: AssetImage(
-                            "lib/assets/images/icons8-avatar-50.png",
-                          ),
-                        ),
+                          CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: gold.withOpacity(0.18),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: darkGold,
+                                    size: 40,
+                                  ),
+                                ),
 
                         const SizedBox(width: 16),
                         //date patient

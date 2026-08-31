@@ -1,6 +1,7 @@
 import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/patients_page.dart';
+import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +20,8 @@ class MainPage extends StatelessWidget {
             // =========================
             // HEADER
             // =========================
+              CustomAppbar(title: 'القائمة الرئيسية'),
+        const SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

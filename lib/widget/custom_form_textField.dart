@@ -16,16 +16,18 @@ class CustomTextFiled extends StatefulWidget {
     this.hintColor,
     this.bordercolor,
     this.icon,
-     this.fillcolor, this.fontsizehint,
-       this.readonly=false,
-        this.onTap, this.controller, 
-        this.onChange,
+    this.fillcolor,
+    this.fontsizehint,
+    this.readonly = false,
+    this.onTap,
+    this.controller,
+    this.onChange,
   });
 
   final String? hint;
   final int? maxLines;
   final void Function(String?)? onSave;
-  
+
   final String? initialValue;
   final TextDecoration? textdecoration;
   final bool obsecureText;
@@ -47,28 +49,27 @@ class CustomTextFiled extends StatefulWidget {
 }
 
 class _CustomTextFiledState extends State<CustomTextFiled> {
-    late bool isObsecure;
+  late bool isObsecure;
 
   @override
   void initState() {
     super.initState();
     isObsecure = widget.obsecureText;
   }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: widget.height,
       width: widget.width,
       child: TextFormField(
-    
         initialValue: widget.initialValue,
-          onChanged: widget.onChange,
+        onChanged: widget.onChange,
         onSaved: widget.onSave,
         obscureText: isObsecure,
         readOnly: widget.readonly,
         onTap: widget.onTap,
-        controller:widget.controller ,
-        
+        controller: widget.controller,
 
         textDirection: widget.textdecoration == TextDecoration.none
             ? TextDirection.rtl
@@ -76,7 +77,7 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
 
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return 'The filed is required';
+            return 'الحقل مطلوب';
           } else {
             return null;
           }
@@ -87,27 +88,37 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
         maxLines: widget.maxLines,
         decoration: InputDecoration(
           filled: true,
-          fillColor:widget.fillcolor??kPrimaryColor,
+          fillColor: widget.fillcolor ?? kPrimaryColor,
           hintText: widget.hint,
-          
-          prefixIcon: Icon(widget.icon, color: Color(0xffC1AD94), size: 20),
-          hintTextDirection: TextDirection.ltr,
+          hintTextDirection: TextDirection.rtl,
 
-          suffixIcon: widget.showPasswordIcon
+          hintStyle: TextStyle(
+            color: widget.hintColor ?? Colors.black,
+            fontSize: widget.fontsizehint ?? 16,
+          ),
+          // Left side in RTL (Password toggle eye)
+          prefixIcon: widget.showPasswordIcon
               ? IconButton(
-                  onPressed: ()
-                  {
-                    
-                  setState(() {
-                    isObsecure=!isObsecure;
-                  });
+                  onPressed: () {
+                    setState(() {
+                      isObsecure = !isObsecure;
+                    });
                   },
                   icon: Icon(
                     isObsecure ? Icons.visibility_off : Icons.visibility,
+                    color: const Color(0xffC1AD94),
+                    size: 22,
                   ),
                 )
               : null,
-          hintStyle: TextStyle(color: widget.hintColor ?? Colors.black, fontSize:widget.fontsizehint?? 16),
+          // Right side in RTL (Standard input icon, if provided)
+          suffixIcon: widget.icon != null
+              ? Icon(widget.icon, color: const Color(0xffC1AD94), size: 20)
+              : null,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: widget.bordercolor ?? kFontColor),

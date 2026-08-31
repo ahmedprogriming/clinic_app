@@ -1,6 +1,7 @@
 import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/edit_patient_cubit/cubit/edit_patient_cubit.dart';
+import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:clinic_app/widget/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class _EditPatientState extends State<EditPatient> {
       },
       builder: (context, state) {
         final isLoading = state is EditPatientLoding;
-        
+
         if (isLoading && nameController.text.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -85,6 +86,9 @@ class _EditPatientState extends State<EditPatient> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  CustomAppbar(title: 'قائمة تعديل بيانات المريض'),
+
+                  const SizedBox(height: 30),
                   Container(
                     padding: const EdgeInsets.all(16),
                     width: 350,

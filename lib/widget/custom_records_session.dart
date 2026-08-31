@@ -1,4 +1,5 @@
 import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/helper/selected_state.dart';
 import 'package:clinic_app/screens/details_session_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,12 +9,13 @@ class RecordsSessionPatient extends StatelessWidget {
     super.key,
     required this.textTop,
     required this.textbottom,
-    required this.state,
+    required this.state, required this.sessionId,
   });
 
   final String textTop;
   final String textbottom;
   final String state;
+  final String sessionId;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class RecordsSessionPatient extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: selectcolorcontanerState(state),
+                    color: selectBadgeBgColor(state),
                   ),
                   child: Text(state, style: TextStyle(fontSize: 14)),
                 ),
@@ -77,7 +79,7 @@ class RecordsSessionPatient extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   onPressed: () {
-                    Navigator.pushNamed(context, DetailsSessionPage.id);
+                    Navigator.pushNamed(context, DetailsSessionPage.id,arguments: sessionId,);
                   },
                   icon: const Icon(
                     Icons.arrow_back,
@@ -110,15 +112,4 @@ class RecordsSessionPatient extends StatelessWidget {
     );
   }
 
-  Color selectcolorcontanerState(String state) {
-    switch (state) {
-      case 'مكتملة':
-        return const Color(0xffEDF4EC);
-      case 'قادمة':
-        return const Color.fromARGB(255, 239, 224, 193);
-      case 'ملغاة':
-        return const Color.fromARGB(255, 239, 180, 180);
-    }
-    return const Color.fromARGB(255, 242, 244, 241);
-  }
 }

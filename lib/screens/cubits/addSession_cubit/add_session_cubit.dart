@@ -13,7 +13,7 @@ part 'add_session_state.dart';
 class AddSessionCubit extends Cubit<AddSessionState> {
   AddSessionCubit() : super(AddSessionInitial());
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+
   String? selectedSessionType;
   String? secetedSessionState;
 

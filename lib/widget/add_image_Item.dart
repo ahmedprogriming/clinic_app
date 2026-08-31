@@ -4,8 +4,15 @@ import 'package:image_picker/image_picker.dart';
 
 class AddImageItem extends StatefulWidget {
   final ValueChanged<List<File>>? onImagesSelected;
+  final List<String> initialUrls;
+  final bool isReadOnly;
 
-  const AddImageItem({super.key, this.onImagesSelected});
+  const AddImageItem({
+    super.key,
+    this.onImagesSelected,
+    this.initialUrls = const [],
+    this.isReadOnly = false,
+  });
 
   @override
   State<AddImageItem> createState() => _AddImageItemState();
@@ -16,6 +23,8 @@ class _AddImageItemState extends State<AddImageItem> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImages() async {
+    if (widget.isReadOnly) return;
+
     final List<XFile> pickedFiles = await _picker.pickMultiImage(
       imageQuality: 80,
     );
@@ -30,6 +39,9 @@ class _AddImageItemState extends State<AddImageItem> {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasUrls = widget.initialUrls.isNotEmpty;
+    final bool hasFiles = _selectedImages.isNotEmpty;
+
     return Container(
       width: double.infinity,
       height: 125,
@@ -38,62 +50,84 @@ class _AddImageItemState extends State<AddImageItem> {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0xffE6D8C0)),
       ),
-      child: _selectedImages.isEmpty
+      child: !hasUrls && !hasFiles
           ? InkWell(
-              onTap: _pickImages,
+              onTap: widget.isReadOnly ? null : _pickImages,
               borderRadius: BorderRadius.circular(20),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.add_photo_alternate_outlined,
-                      color: Color(0xffB08D57), size: 28),
-                  SizedBox(height: 8),
-                  Text('إضافة صور للجلسة',
-                      style: TextStyle(color: Color(0xffB08D57), fontSize: 13)),
+                  Icon(
+                    widget.isReadOnly
+                        ? Icons.image_not_supported_outlined
+                        : Icons.add_photo_alternate_outlined,
+                    color: const Color(0xffB08D57),
+                    size: 28,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.isReadOnly ? 'لا توجد صور مرفقة' : 'إضافة صور للجلسة',
+                    style: const TextStyle(color: Color(0xffB08D57), fontSize: 13),
+                  ),
                 ],
               ),
             )
           : Row(
               children: [
-                IconButton(
-                  icon: const Icon(Icons.add_a_photo, color: Color(0xffB08D57)),
-                  onPressed: _pickImages,
-                ),
+                if (!widget.isReadOnly)
+                  IconButton(
+                    icon: const Icon(Icons.add_a_photo, color: Color(0xffB08D57)),
+                    onPressed: _pickImages,
+                  ),
                 Expanded(
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.all(8),
-                    itemCount: _selectedImages.length,
+                    itemCount: hasUrls ? widget.initialUrls.length : _selectedImages.length,
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       return Stack(
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.file(
-                              _selectedImages[index],
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                            child: hasUrls
+                                ? Image.network(
+                                    widget.initialUrls[index],
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Container(
+                                      width: 100,
+                                      height: 100,
+                                      color: Colors.grey.shade200,
+                                      child: const Icon(Icons.broken_image),
+                                    ),
+                                  )
+                                : Image.file(
+                                    _selectedImages[index],
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
-                          Positioned(
-                            top: 2,
-                            right: 2,
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedImages.removeAt(index);
-                                });
-                                widget.onImagesSelected?.call(_selectedImages);
-                              },
-                              child: const CircleAvatar(
-                                radius: 10,
-                                backgroundColor: Colors.red,
-                                child: Icon(Icons.close, size: 12, color: Colors.white),
+                          if (!widget.isReadOnly)
+                            Positioned(
+                              top: 2,
+                              right: 2,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedImages.removeAt(index);
+                                  });
+                                  widget.onImagesSelected?.call(_selectedImages);
+                                },
+                                child: const CircleAvatar(
+                                  radius: 10,
+                                  backgroundColor: Colors.red,
+                                  child: Icon(Icons.close, size: 12, color: Colors.white),
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       );
                     },

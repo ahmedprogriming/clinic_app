@@ -19,28 +19,9 @@ class PatientsPage extends StatelessWidget {
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(0xffD8A33D),
       ),
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        title:Text('Patints'
-        ,style: TextStyle(color:Color(0xff8F6337)),) ,
-        centerTitle: true,
-       leading: Padding(
-    padding: const EdgeInsets.all(8),
-    child: CircleAvatar(
-      backgroundColor: const Color(0xFFD6A857).withOpacity(0.15),
-      child: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: const Icon(
-          Icons.arrow_back_ios_new,
-          color: Color(0xFFD6A857),
-          size: 18,
-        ),
-      ),
-    ),
-  ),
-       
-      ),
-      body:ListPatients(),
+      
+      body:SafeArea(child:  ListPatients(),)
+     
     );
   }
 }

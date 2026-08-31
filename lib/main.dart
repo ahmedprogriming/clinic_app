@@ -1,5 +1,6 @@
 import 'package:clinic_app/screens/add_new_patient_page.dart';
 import 'package:clinic_app/screens/add_new_session_Page.dart';
+
 import 'package:clinic_app/screens/cubits/edit_patient_cubit/cubit/edit_patient_cubit.dart';
 import 'package:clinic_app/screens/cubits/login_cubit/login_cubit.dart';
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
@@ -16,9 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize locale formatting for Arabic (or null to initialize all)
+  await initializeDateFormatting('ar', null);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ClinicApp());
 }

@@ -6,6 +6,7 @@ import 'package:clinic_app/screens/cubits/edit_patient_cubit/cubit/edit_patient_
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/cubits/session_cubit/cubit/sessionlist_cubit.dart';
 import 'package:clinic_app/widget/add_new_session.dart';
+import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_elevated_button.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:clinic_app/widget/custom_records_session.dart';
@@ -63,7 +64,6 @@ class _ListSessionState extends State<ListSession> {
 
     DateTime date = timestamp.toDate();
 
-    // مصفوفة بأسماء الأشهر العربية
     const List<String> arabicMonths = [
       'يناير',
       'فبراير',
@@ -81,14 +81,7 @@ class _ListSessionState extends State<ListSession> {
 
     String monthName = arabicMonths[date.month - 1];
 
-    // تحويل نظام 24 ساعة إلى 12 ساعة مع تحديد الفترة
-    int hour12 = date.hour % 12;
-    if (hour12 == 0) hour12 = 12; // معالجة منتصف الليل والظهيرة
-
-    String period = date.hour >= 12 ? 'مساءً' : 'صباحاً';
-    String minute = date.minute.toString().padLeft(2, '0');
-
-    return '$monthName ${date.day} — ${date.year} — $hour12:$minute $period';
+    return '$monthName ${date.day} — ${date.year}'.trim();
   }
 
   final TextEditingController searchController = TextEditingController();
@@ -134,7 +127,9 @@ class _ListSessionState extends State<ListSession> {
               ListView(
                 padding: const EdgeInsets.only(bottom: 100),
                 children: [
-                  const SizedBox(height: 20),
+                  CustomAppbar(title: 'قائمة جلسات المريض'),
+
+                  const SizedBox(height: 30),
                   // ========================= // معلومات المريض // =========================
                   BlocConsumer<EditPatientCubit, EditPatientState>(
                     listener: (context, state) {
@@ -355,8 +350,9 @@ class _ListSessionState extends State<ListSession> {
                         ),
                         child: RecordsSessionPatient(
                           textTop: 'الجلسة# ${session.numberSession}',
-                          textbottom: '${_formatTimestamp(session.date)}',
+                          textbottom: _formatTimestamp(session.date),
                           state: session.state,
+                          sessionId: session.docId,
                         ),
                       );
                     }),

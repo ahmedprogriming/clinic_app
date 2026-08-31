@@ -19,7 +19,7 @@ class LoginPage extends StatelessWidget {
   String? password;
 
   bool? isLoad = false;
-
+bool _rememberMe = false;
   GlobalKey<FormState> formKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget {
         if (state is LoginLoading) {
           isLoad = true;
         } else if (state is LoginSuccess) {
-            BlocProvider.of<PatientsCubit>(context).getpatients();
+          BlocProvider.of<PatientsCubit>(context).getpatients();
           Navigator.pushNamed(context, DashboardPage.id, arguments: email);
           isLoad = false;
         } else if (state is LoginFailure) {
@@ -37,6 +37,7 @@ class LoginPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        _rememberMe=state.rememberMe;
         return ModalProgressHUD(
           inAsyncCall: isLoad!,
           child: Scaffold(
@@ -83,6 +84,62 @@ class LoginPage extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        // Align everything to the right for RTL layout consistency
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // The Arabic text label
+                          Text(
+                            'تذكرني',
+                            style: TextStyle(
+                              color:
+                                  kFontColor, // Matching your font color constant
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ), // Small space between text and box
+                          // The styled Checkbox
+                          SizedBox(
+                            height: 24, // Keep it compact
+                            width: 24,
+                            child: Checkbox(
+                              value: _rememberMe,
+
+                              // Match design: Gold when active, subtle border when inactive
+                              activeColor: gold, // Uses your gold constant
+                              checkColor: cream, // Contrast color when checked
+                              // Custom border styling to match input fields
+                              side: const BorderSide(
+                                color: Color(
+                                  0xFFC1AD94,
+                                ), // Matches the subtle icon color
+                                width: 1.5,
+                              ),
+
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  4,
+                                ), // Slightly rounded corners
+                              ),
+
+                              onChanged: (bool? newValue) {
+                             
+                                 context.read<LoginCubit>().selectedRemmberme(newValue!);
+                               
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 20,
+                    ), // Spacing before the main login button
                     CustomButton(
                       namebutton: 'تسجيل الدخول',
                       onTap: () async {

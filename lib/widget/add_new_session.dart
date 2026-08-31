@@ -4,6 +4,7 @@ import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/addSession_cubit/add_session_cubit.dart';
 import 'package:clinic_app/widget/add_image_Item.dart';
+import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_elevated_button.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:clinic_app/widget/custom_selected_element.dart';
@@ -81,7 +82,10 @@ class _AddNewSessionState extends State<AddNewSession> {
         return Directionality(
           textDirection: TextDirection.rtl,
           child: ListView(
-            children: [
+            children: [ 
+               CustomAppbar(title: 'قائمة اضافة جلسة'),
+
+                  const SizedBox(height: 30),
               Text(
                 ' جلسة جديدة',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
