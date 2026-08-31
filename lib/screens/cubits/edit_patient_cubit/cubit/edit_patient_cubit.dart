@@ -72,5 +72,19 @@ class EditPatientCubit extends Cubit<EditPatientState> {
       emit(EditPatientFialure(e.toString(), selectedGender: selectedGender));
     }
   }
+
+  
+  // deleted patient
+
+  Future<void> deletepatient({required String patientId}) async {
+    emit(EditPatienDeletedtLoding());
+
+    try {
+      await firestore.collection('Patients').doc(patientId).delete();
+      emit(EditPatientDeletedSuccess(selectedGender: selectedGender));
+    } catch (e) {
+      emit(EditPatientFialure( e.toString(),selectedGender: selectedGender));
+    }
+  }
   
 }

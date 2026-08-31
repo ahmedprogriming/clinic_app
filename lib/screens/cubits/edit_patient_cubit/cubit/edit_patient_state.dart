@@ -13,7 +13,9 @@ final class EditPatientLoding extends EditPatientState {
  const EditPatientLoding({super.selectedGender});
 }
 
-
+final class EditPatienDeletedtLoding extends EditPatientState {
+ const EditPatienDeletedtLoding({super.selectedGender});
+}
 final class EditPatientDataLoaded extends EditPatientState 
 {
 final  Map<String,dynamic> patientData;
@@ -27,6 +29,15 @@ final class EditPatientSuccess extends EditPatientState
 
 
   const EditPatientSuccess({super.selectedGender});
+
+}
+
+
+final class EditPatientDeletedSuccess extends EditPatientState 
+{
+
+
+  const EditPatientDeletedSuccess({super.selectedGender});
 
 }
 final class EditPatientFialure extends EditPatientState {

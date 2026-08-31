@@ -61,7 +61,7 @@ class DetailSession extends StatelessWidget {
             textDirection: TextDirection.rtl,
             child: ListView(
               children: [
-                CustomAppbar(title: 'قائمة تفاصيل الجلسة'),
+                CustomAppbar(title: 'قائمة تفاصيل جلسة'),
 
                 const SizedBox(height: 30),
                 Container(
@@ -320,9 +320,8 @@ class DetailSession extends StatelessWidget {
                             borderColor: const Color(0xffE9D9BD),
                             iconColor: gold,
                             onPressed: () {
-                              context.read<EditSessionCubit>().deleteSession(
-                                sessionId: sessionId,
-                              );
+                              _showDeleteConfirmationDialog(context,sessionId);
+                             
                             },
                           ),
                         ),
@@ -341,4 +340,79 @@ class DetailSession extends StatelessWidget {
       },
     );
   }
+  void _showDeleteConfirmationDialog(BuildContext context, String sessionId) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
+      return Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: Color(0xffE9D9BD))
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+              SizedBox(width: 8),
+              Text(
+                'تأكيد الحذف',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff3D291C),
+                ),
+              ),
+            ],),
+            content: const Text(
+            'هل أنت متأكد من حذف هذه الجلسة؟ لا يمكن التراجع عن هذا الإجراء.',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+            ),
+          ), 
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text(
+                'إلغاء',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ElevatedButton
+            (
+                style:ElevatedButton.styleFrom(backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,),
+                onPressed: () {
+                Navigator.pop(dialogContext); // Close dialog
+                context.read<EditSessionCubit>().deleteSession(
+                      sessionId: sessionId,
+                    );
+              },
+              child: const Text(
+                'نعم',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            
+            
+          ],
+        ),
+      );
+    },
+  );
+}
 }

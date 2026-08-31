@@ -56,7 +56,21 @@ class _EditPatientState extends State<EditPatient> {
           ageController.text = state.patientData['age']?.toString() ?? '';
         }
         if (state is EditPatientSuccess) {
-          ShowSnackbar(context, 'تمت التعديل المريض بنجاح');
+          ShowSnackbar(context, 'تم التعديل المريض بنجاح');
+
+          nameController.clear();
+          phoneController.clear();
+          ageController.clear();
+          addressController.clear();
+
+          context.read<EditPatientCubit>().clearGender();
+
+          // تم نقل الإغلاق إلى هنا بعد النجاح الفعلّي
+          Navigator.pop(context);
+        }
+
+         if (state is EditPatientDeletedSuccess) {
+          ShowSnackbar(context, 'تم حذف المريض بنجاح');
 
           nameController.clear();
           phoneController.clear();
@@ -75,7 +89,7 @@ class _EditPatientState extends State<EditPatient> {
       },
       builder: (context, state) {
         final isLoading = state is EditPatientLoding;
-
+        final isDeletedLoading=state is EditPatienDeletedtLoding;
         if (isLoading && nameController.text.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -317,9 +331,12 @@ class _EditPatientState extends State<EditPatient> {
                         ),
 
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed:isDeletedLoading?null: () {
                             // Handle button press
-                            Navigator.pop(context);
+                            _showDeleteConfirmationDialog(
+                              context,
+                              widget.docId,
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -332,8 +349,8 @@ class _EditPatientState extends State<EditPatient> {
                               vertical: 15,
                             ),
                           ),
-                          child: const Text(
-                            'الغاء',
+                          child:  Text(
+                           isDeletedLoading?'جاري..': 'حذف',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -360,4 +377,80 @@ class _EditPatientState extends State<EditPatient> {
       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
     ),
   );
+
+  void _showDeleteConfirmationDialog(BuildContext context, String patientId) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: const BorderSide(color: Color(0xffE9D9BD)),
+            ),
+            title: const Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+                SizedBox(width: 8),
+                Text(
+                  'تأكيد الحذف',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff3D291C),
+                  ),
+                ),
+              ],
+            ),
+            content: const Text(
+              'هل أنت متأكد من حذف هذا المريض؟ لا يمكن التراجع عن هذا الإجراء.',
+              style: TextStyle(fontSize: 14, color: Colors.black87),
+            ),
+            actionsPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text(
+                  'إلغاء',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                onPressed: () {
+                  Navigator.pop(dialogContext); // Close dialog
+                  context.read<EditPatientCubit>().deletepatient(
+                    patientId: patientId,
+                  );
+                },
+                child: const Text(
+                  'نعم',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
