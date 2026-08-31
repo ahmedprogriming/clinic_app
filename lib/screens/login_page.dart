@@ -12,15 +12,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   static const String id = 'LoginPage';
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   String? email;
 
   String? password;
 
   bool? isLoad = false;
+
 bool _rememberMe = false;
+
   GlobalKey<FormState> formKey = GlobalKey();
+final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _checkSavedData();
+  }
+
+  Future<void> _checkSavedData() async {
+    final data = await context.read<LoginCubit>().loadSavedCredentials();
+    if (data['rememberMe'] == true && data['email'].isNotEmpty) {
+      emailController.text = data['email'];
+    }
+  }
+@override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
@@ -38,6 +66,7 @@ bool _rememberMe = false;
       },
       builder: (context, state) {
         _rememberMe=state.rememberMe;
+        final isLoading=state is LoginLoading;
         return ModalProgressHUD(
           inAsyncCall: isLoad!,
           child: Scaffold(
@@ -70,6 +99,7 @@ bool _rememberMe = false;
                     const SizedBox(height: 20),
                     CustomTextFiled(
                       hint: 'البريدالالكتروني',
+                      controller: emailController,
                       onChange: (data) {
                         email = data;
                       },
@@ -77,6 +107,7 @@ bool _rememberMe = false;
                     SizedBox(height: 15),
                     CustomTextFiled(
                       showPasswordIcon: true,
+                      controller: passwordController,
                       obsecureText: true,
                       hint: 'كلمة المرور',
                       onChange: (data) {
@@ -126,9 +157,9 @@ bool _rememberMe = false;
                                 ), // Slightly rounded corners
                               ),
 
-                              onChanged: (bool? newValue) {
+                              onChanged: (val) {
                              
-                                 context.read<LoginCubit>().selectedRemmberme(newValue!);
+                                 context.read<LoginCubit>().toggleRememberMe(val ?? false);
                                
                               },
                             ),
@@ -142,11 +173,12 @@ bool _rememberMe = false;
                     ), // Spacing before the main login button
                     CustomButton(
                       namebutton: 'تسجيل الدخول',
-                      onTap: () async {
+                      isLoading: isLoading,
+                      onTap:isLoading ?null :  ()  {
                         if (formKey.currentState!.validate()) {
                           BlocProvider.of<LoginCubit>(
                             context,
-                          ).LoginAuth(email!, password!);
+                          ).LoginAuth(emailController.text.trim(), passwordController.text.trim());
                         }
                       },
                     ),
