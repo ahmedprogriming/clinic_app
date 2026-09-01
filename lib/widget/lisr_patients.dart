@@ -1,4 +1,4 @@
-import 'package:clinic_app/model/patients_model.dart';
+
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_button.dart';
@@ -178,9 +178,9 @@ class _ListPatientsState extends State<ListPatients> {
                     final patient = patientsList[index];
 
                     return CustomCardPatients(
-                      patientName: patient.patientaname ?? '',
-                      age: patient.age ?? 0,
-                      numberphone: patient.numberPhone ?? '',
+                      patientName: patient.patientaname,
+                      age: patient.age ,
+                      numberphone: patient.numberPhone ,
                       docId: patient.docId ?? '',
                       onTap: () {
                         // Navigate to patient sessions or edit page

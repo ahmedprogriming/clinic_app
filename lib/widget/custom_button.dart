@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -44,7 +44,7 @@ class CustomButton extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                    spacing: 12,
                   children: [
-                    if (icon != null) icon!,
+                     (icon != null)? icon! : SizedBox.shrink(),
                     
                     Text(
                       namebutton,

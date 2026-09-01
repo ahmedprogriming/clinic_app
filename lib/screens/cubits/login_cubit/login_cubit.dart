@@ -29,7 +29,7 @@ void toggleRememberMe(bool value) {
     };
   }
 
-  Future<void> LoginAuth(String email, String password) async {
+  Future<void> loginAuth(String email, String password) async {
    
     emit(LoginLoading(rememberMe: rememberMe));
     try {
@@ -62,8 +62,8 @@ void toggleRememberMe(bool value) {
       } else {
         emit(LoginFailure(errMessage:  ex.message ?? ex.code,rememberMe: rememberMe));
       }
-    } on Exception catch (e) {
-      emit(LoginFailure(errMessage:  'حدث خطأ، حاول مرة أخرى',rememberMe: rememberMe));
+    } on Exception catch (ex) {
+      emit(LoginFailure(errMessage:  ex.toString(),rememberMe: rememberMe));
     }
   }
 }

@@ -12,7 +12,7 @@ class CustomAppbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
-            backgroundColor: const Color(0xFFD6A857).withOpacity(0.15),
+            backgroundColor: const Color(0xFFD6A857).withValues(alpha: 0.15),
             child: IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(

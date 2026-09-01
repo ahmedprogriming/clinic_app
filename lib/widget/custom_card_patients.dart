@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/screens/edit_data_patient_page.dart';
 import 'package:clinic_app/screens/sessions_page.dart';
 import 'package:clinic_app/widget/Send_Message_Dialog.dart';
@@ -28,7 +28,7 @@ class CustomCardPatients extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
+            SizedBox(
               height: 140,
               width: 1000,
 
@@ -48,7 +48,7 @@ class CustomCardPatients extends StatelessWidget {
                         // صورة المريض
                           CircleAvatar(
                                   radius: 40,
-                                  backgroundColor: gold.withOpacity(0.18),
+                                  backgroundColor: gold.withValues(alpha: 0.18),
                                   child: Icon(
                                     Icons.person,
                                     color: darkGold,
@@ -143,7 +143,7 @@ class CustomCardPatients extends StatelessWidget {
                             ),
                             const SizedBox(height: 30),
 
-                            Container(
+                            SizedBox(
                               width: 100,
                               child: const Text(
                                 "ارسال اشعار",

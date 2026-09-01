@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/screens/patients_page.dart';
 import 'package:clinic_app/widget/custom_Appbar.dart';
@@ -34,7 +34,7 @@ class MainPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xffB2935B).withOpacity(0.25),
+                        color: Color(0xffB2935B).withValues(alpha: 0.25),
                         blurRadius: 25,
                         offset: const Offset(0, 8),
                       ),
@@ -284,7 +284,7 @@ class _DashboardCard extends StatelessWidget {
           Text(
             subtitle,
             textAlign: TextAlign.right,
-            style: TextStyle(fontSize: 13, color: textColor.withOpacity(.75)),
+            style: TextStyle(fontSize: 13, color: textColor.withValues(alpha: 0.75)),
           ),
         ],
       ),

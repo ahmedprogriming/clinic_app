@@ -22,7 +22,7 @@ final void Function()? onTap;
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 40,
-                    color:Color(0xffD6A857).withOpacity(.2),
+                    color:Color(0xffD6A857).withValues(alpha: 0.2),
                     spreadRadius: 0,
                     offset: Offset(10,10),
                   ),

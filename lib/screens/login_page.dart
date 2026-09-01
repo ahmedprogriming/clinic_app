@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/login_cubit/login_cubit.dart';
@@ -60,7 +60,7 @@ final emailController = TextEditingController();
           Navigator.pushNamed(context, DashboardPage.id, arguments: email);
           isLoad = false;
         } else if (state is LoginFailure) {
-          ShowSnackbar(context, state.errMessage);
+          showSnackbar(context, state.errMessage);
           isLoad = false;
         }
       },
@@ -178,7 +178,7 @@ final emailController = TextEditingController();
                         if (formKey.currentState!.validate()) {
                           BlocProvider.of<LoginCubit>(
                             context,
-                          ).LoginAuth(emailController.text.trim(), passwordController.text.trim());
+                          ).loginAuth(emailController.text.trim(), passwordController.text.trim());
                         }
                       },
                     ),

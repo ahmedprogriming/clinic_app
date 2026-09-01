@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 class SessionItem extends StatelessWidget {
   const SessionItem({super.key, required this.icon, required this.title, required this.value});

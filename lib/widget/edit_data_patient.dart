@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/edit_patient_cubit/cubit/edit_patient_cubit.dart';
 import 'package:clinic_app/widget/custom_Appbar.dart';
@@ -47,7 +47,7 @@ class _EditPatientState extends State<EditPatient> {
   Widget build(BuildContext context) {
     return BlocConsumer<EditPatientCubit, EditPatientState>(
       listener: (context, state) {
-        // TODO: implement listener
+       
         if (state is EditPatientDataLoaded) {
           // تعبئة الحقول عند نجاح جلب البيانات
           nameController.text = state.patientData['patientname'] ?? '';
@@ -56,7 +56,7 @@ class _EditPatientState extends State<EditPatient> {
           ageController.text = state.patientData['age']?.toString() ?? '';
         }
         if (state is EditPatientSuccess) {
-          ShowSnackbar(context, 'تم التعديل المريض بنجاح');
+          showSnackbar(context, 'تم التعديل المريض بنجاح');
 
           nameController.clear();
           phoneController.clear();
@@ -70,7 +70,7 @@ class _EditPatientState extends State<EditPatient> {
         }
 
          if (state is EditPatientDeletedSuccess) {
-          ShowSnackbar(context, 'تم حذف المريض بنجاح');
+          showSnackbar(context, 'تم حذف المريض بنجاح');
 
           nameController.clear();
           phoneController.clear();
@@ -84,7 +84,7 @@ class _EditPatientState extends State<EditPatient> {
         }
 
         if (state is EditPatientFialure) {
-          ShowSnackbar(context, state.erroMessage);
+          showSnackbar(context, state.erroMessage);
         }
       },
       builder: (context, state) {
@@ -112,7 +112,7 @@ class _EditPatientState extends State<EditPatient> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.grey.withValues(alpha: 0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(
@@ -245,7 +245,7 @@ class _EditPatientState extends State<EditPatient> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
+                          color: Colors.grey.withValues(alpha: 0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(
@@ -275,7 +275,7 @@ class _EditPatientState extends State<EditPatient> {
                                       agetxt.isEmpty ||
                                       address.isEmpty ||
                                       gender == null) {
-                                    ShowSnackbar(
+                                    showSnackbar(
                                       context,
                                       'يرجى ملء جميع الحقول',
                                     );
@@ -285,7 +285,7 @@ class _EditPatientState extends State<EditPatient> {
                                   final parsedAge = int.tryParse(agetxt);
 
                                   if (parsedAge == null) {
-                                    ShowSnackbar(
+                                    showSnackbar(
                                       context,
                                       'العمر يجب أن يكون رقمًا',
                                     );

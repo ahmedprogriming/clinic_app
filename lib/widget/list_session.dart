@@ -1,11 +1,11 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/model/sessions_modle.dart';
 import 'package:clinic_app/screens/add_new_session_Page.dart';
 import 'package:clinic_app/screens/cubits/edit_patient_cubit/cubit/edit_patient_cubit.dart';
-import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
+
 import 'package:clinic_app/screens/cubits/session_cubit/cubit/sessionlist_cubit.dart';
-import 'package:clinic_app/widget/add_new_session.dart';
+
 import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_elevated_button.dart';
 import 'package:clinic_app/widget/custom_form_textField.dart';
@@ -55,7 +55,7 @@ class _ListSessionState extends State<ListSession> {
     ];
 
     String monthName = arabicMonths[date.month - 1];
-    return '${date.day}/ ${monthName} /${date.year}';
+    return '${date.day}/ $monthName /${date.year}';
   }
 
   // تنسيق التاريخ المستخرج من Firestore
@@ -96,12 +96,12 @@ class _ListSessionState extends State<ListSession> {
   Widget build(BuildContext context) {
     return BlocConsumer<SessionlistCubit, SessionlistState>(
       listener: (context, state) {
-        // TODO: implement listener
+     
         if (state is SessionlistSuccess) {
           sessionsDate = state.sessionsList;
         }
         if (state is SessionlistFailure) {
-          ShowSnackbar(context, state.erroMessage);
+          showSnackbar(context, state.erroMessage);
         }
       },
       builder: (context, state) {
@@ -133,7 +133,7 @@ class _ListSessionState extends State<ListSession> {
                   // ========================= // معلومات المريض // =========================
                   BlocConsumer<EditPatientCubit, EditPatientState>(
                     listener: (context, state) {
-                      // TODO: implement listener
+         
 
                       if (state is EditPatientDataLoaded) {
                         namePatient = state.patientData['patientname'];
@@ -141,7 +141,7 @@ class _ListSessionState extends State<ListSession> {
                       }
 
                       if (state is EditPatientFialure) {
-                        ShowSnackbar(context, state.erroMessage);
+                        showSnackbar(context, state.erroMessage);
                       }
                     },
                     builder: (context, state) {
@@ -157,7 +157,7 @@ class _ListSessionState extends State<ListSession> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: gold.withOpacity(0.2)),
+                          border: Border.all(color: gold.withValues(alpha: 0.2)),
                         ),
                         child: Column(
                           children: [
@@ -166,7 +166,7 @@ class _ListSessionState extends State<ListSession> {
                               children: [
                                 CircleAvatar(
                                   radius: 40,
-                                  backgroundColor: gold.withOpacity(0.18),
+                                  backgroundColor: gold.withValues(alpha: 0.18),
                                   child: Icon(
                                     Icons.person,
                                     color: darkGold,
@@ -188,7 +188,7 @@ class _ListSessionState extends State<ListSession> {
                                       ),
                                       const SizedBox(height: 6),
                                       Text(
-                                        '$namePatient',
+                                        namePatient,
                                         style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.black,
@@ -265,7 +265,7 @@ class _ListSessionState extends State<ListSession> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: Custom_small_contaner(
+                          child: CustomSmallContaner(
                             textTop: 'آخر جلسة',
                             textbottom:
                                 completSession != null &&
@@ -277,7 +277,7 @@ class _ListSessionState extends State<ListSession> {
                         ),
                         const SizedBox(width: 10),
                         Expanded(
-                          child: Custom_small_contaner(
+                          child: CustomSmallContaner(
                             textTop: 'الجلسة القادمة',
                             textbottom:
                                 upcomingSession != null &&

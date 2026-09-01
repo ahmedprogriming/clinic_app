@@ -1,9 +1,8 @@
-
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:flutter/material.dart';
 
-class Custom_small_contaner extends StatelessWidget {
-  const Custom_small_contaner({
+class CustomSmallContaner extends StatelessWidget {
+  const CustomSmallContaner({
     super.key,
     required this.textTop,
     required this.textbottom,
@@ -23,10 +22,10 @@ class Custom_small_contaner extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
-        border: Border.all(color: gold.withOpacity(0.2)),
+        border: Border.all(color: gold.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 0.1),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/addSession_cubit/add_session_cubit.dart';
 import 'package:clinic_app/widget/add_image_Item.dart';
@@ -49,14 +49,14 @@ class _AddNewSessionState extends State<AddNewSession> {
   Widget build(BuildContext context) {
     return BlocConsumer<AddSessionCubit, AddSessionState>(
       listener: (context, state) {
-        // TODO: implement listener
+        
         if(state is AddSessionLoading)
         {
           selectedType=state.selectedStateSessionType;
           selectedState=state.secetedStateSessionState;
         }
          if (state is AddSessionSuccess) {
-          ShowSnackbar(context, 'تمت إضافة الجلسة بنجاح');
+          showSnackbar(context, 'تمت إضافة الجلسة بنجاح');
 
           noteController.clear();
           nameDoctorController.clear();
@@ -70,7 +70,7 @@ class _AddNewSessionState extends State<AddNewSession> {
         }
 
         if (state is AddSessionFailure) {
-          ShowSnackbar(context, state.erroMessage);
+          showSnackbar(context, state.erroMessage);
         }
 
       },
@@ -108,7 +108,7 @@ class _AddNewSessionState extends State<AddNewSession> {
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -266,7 +266,7 @@ context.read<AddSessionCubit>().changeSessionType('تدليك');
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -332,7 +332,7 @@ context.read<AddSessionCubit>().changeSessionType('تدليك');
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -371,7 +371,7 @@ context.read<AddSessionCubit>().changeSessionType('تدليك');
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -424,7 +424,7 @@ context.read<AddSessionCubit>().changeSessionType('تدليك');
                                       places.isEmpty ||
                                       state==null||
                                       type == null) {
-                                    ShowSnackbar(
+                                    showSnackbar(
                                       context,
                                      'يرجى ملء جميع الحقول المطلوبة واختيار النوع والحالة',
                                     );

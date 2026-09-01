@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/helper/selected_state.dart';
 import 'package:clinic_app/screens/cubits/editSession_cubit/edit_session_cubit.dart';
@@ -34,19 +34,19 @@ class DetailSession extends StatelessWidget {
     ];
 
     String monthName = arabicMonths[date.month - 1];
-    return '${date.day}/ ${monthName} /${date.year}';
+    return '${date.day}/ $monthName /${date.year}';
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<EditSessionCubit, EditSessionState>(
       listener: (context, state) {
-        // TODO: implement listener
+       
         if (state is EditSessionFailure) {
-          ShowSnackbar(context, state.erroMessage);
+          showSnackbar(context, state.erroMessage);
         }
         if (state is SessionDeletedSuccess) {
-          ShowSnackbar(context, 'تم حذف الجلسة بنجاح');
+          showSnackbar(context, 'تم حذف الجلسة بنجاح');
           Navigator.pop(context);
         }
       },
@@ -72,7 +72,7 @@ class DetailSession extends StatelessWidget {
                     border: Border.all(color: const Color(0xffE9D9BD)),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 15,
                         offset: const Offset(0, 5),
                       ),
@@ -128,7 +128,7 @@ class DetailSession extends StatelessWidget {
                                   border: Border.all(
                                     color: selectBadgeTextColor(
                                       session.state,
-                                    ).withOpacity(0.3),
+                                    ).withValues(alpha: 0.3),
                                     width: 1,
                                   ),
                                 ),

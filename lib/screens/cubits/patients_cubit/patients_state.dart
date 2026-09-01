@@ -7,7 +7,7 @@ final class PatientsInitial extends PatientsState {}
 final class PatientsLoding extends PatientsState {}
 final class PatientsSuccess extends PatientsState
  {
-  List<PatientsModel> patientsList = [];
+  final List<PatientsModel> patientsList ;
   PatientsSuccess({required this.patientsList});
  }
 final class PatientsFailure extends PatientsState 

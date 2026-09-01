@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/editSession_cubit/edit_session_cubit.dart';
 import 'package:clinic_app/widget/add_image_Item.dart';
@@ -48,7 +48,7 @@ class _EditSessionState extends State<EditSession> {
      List<String> imageUrls=const[];
     return BlocConsumer<EditSessionCubit, EditSessionState>(
       listener: (context, state) {
-        // TODO: implement listener
+    
         if(state is EditSessionLoadedData)
         {
           final session=state.SessionData;
@@ -68,7 +68,7 @@ class _EditSessionState extends State<EditSession> {
         }
         if(state is SessionUpdatedSuccess)
         {
-          ShowSnackbar(context, 'تم تعديل الجلسة بنجاح');
+          showSnackbar(context, 'تم تعديل الجلسة بنجاح');
           noteController.clear();
           nameDoctorController.clear();
            placesController.clear();
@@ -113,7 +113,7 @@ class _EditSessionState extends State<EditSession> {
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -254,7 +254,7 @@ class _EditSessionState extends State<EditSession> {
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -323,7 +323,7 @@ class _EditSessionState extends State<EditSession> {
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),
@@ -362,7 +362,7 @@ class _EditSessionState extends State<EditSession> {
                   border: Border.all(color: const Color(0xffE9D9BD)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withValues(alpha: 0.04),
                       blurRadius: 15,
                       offset: const Offset(0, 5),
                     ),

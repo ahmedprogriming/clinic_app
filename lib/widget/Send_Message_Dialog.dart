@@ -240,7 +240,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                       width: 46,
                       height: 46,
                       decoration: BoxDecoration(
-                        color: gold.withOpacity(0.12),
+                        color: gold.withValues(alpha: 0.12),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(Icons.send_rounded, color: gold, size: 24),
@@ -271,14 +271,14 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   decoration: BoxDecoration(
                     color: cream,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: gold.withOpacity(0.2)),
+                    border: Border.all(color: gold.withValues(alpha: 0.2)),
                   ),
 
                   child: Row(
                     children: [
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor: gold.withOpacity(0.18),
+                        backgroundColor: gold.withValues(alpha: 0.18),
                         child: Icon(Icons.person, color: darkGold),
                       ),
                       const SizedBox(width: 12),
@@ -323,11 +323,11 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: gold.withOpacity(0.35)),
+                      borderSide: BorderSide(color: gold.withValues(alpha: 0.35)),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: gold.withOpacity(0.35)),
+                      borderSide: BorderSide(color: gold.withValues(alpha: 0.35)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -382,11 +382,11 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                     contentPadding: const EdgeInsets.all(14),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: gold.withOpacity(0.35)),
+                      borderSide: BorderSide(color: gold.withValues(alpha: 0.35)),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide(color: gold.withOpacity(0.35)),
+                      borderSide: BorderSide(color: gold.withValues(alpha: 0.35)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -403,7 +403,7 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
                   label: const Text('معاينة الرسالة'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: darkGold,
-                    side: BorderSide(color: gold.withOpacity(0.5)),
+                    side: BorderSide(color: gold.withValues(alpha: 0.5)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),

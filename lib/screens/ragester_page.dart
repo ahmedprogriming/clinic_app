@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/helper/custom_auth.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
@@ -102,13 +102,13 @@ class _RagesterPageState extends State<RagesterPage> {
                       IsLoad = true;
                       setState(() {});
                       if (password != confirmPassword) {
-                        ShowSnackbar(context, 'كلمتا المرور غير متطابقتين');
+                        showSnackbar(context, 'كلمتا المرور غير متطابقتين');
                         IsLoad = false;
                         setState(() {});
                         return;
                       }
                       try {
-                        await RegesterUser(email!, password!, username!);
+                        await regesterUser(email!, password!, username!);
                         BlocProvider.of<PatientsCubit>(context).getpatients();
                         Navigator.pushNamed(
                           context,
@@ -117,35 +117,35 @@ class _RagesterPageState extends State<RagesterPage> {
                         );
                       } on FirebaseAuthException catch (ex) {
                         if (ex.code == 'weak-password') {
-                          ShowSnackbar(
+                          showSnackbar(
                             context,
                             'كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى.',
                           );
                         } else if (ex.code == 'email-already-in-use') {
-                          ShowSnackbar(
+                          showSnackbar(
                             context,
                             'هذا البريد الإلكتروني مسجل بالفعل، يرجى استخدام بريد آخر.',
                           );
                         } else if (ex.code == 'invalid-email') {
-                          ShowSnackbar(
+                          showSnackbar(
                             context,
                             'البريد الإلكتروني غير صحيح، يرجى التأكد منه.',
                           );
                         } else if (ex.code == 'operation-not-allowed') {
-                          ShowSnackbar(
+                          showSnackbar(
                             context,
                             'إنشاء الحساب بهذا النوع من تسجيل الدخول غير مفعل.',
                           );
                         } else if (ex.code == 'network-request-failed') {
-                          ShowSnackbar(
+                          showSnackbar(
                             context,
                             'حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة مرة أخرى.',
                           );
                         } else {
-                          ShowSnackbar(context, ex.message ?? ex.code);
+                          showSnackbar(context, ex.message ?? ex.code);
                         }
                       } catch (ex) {
-                        ShowSnackbar(context, 'حدث خطأ، حاول مرة أخرى');
+                        showSnackbar(context, 'حدث خطأ، حاول مرة أخرى');
                       }
                       IsLoad = false;
 

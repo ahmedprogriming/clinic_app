@@ -1,4 +1,4 @@
-import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/Constant.dart';
 import 'package:clinic_app/screens/cubits/editSession_cubit/edit_session_cubit.dart';
 import 'package:clinic_app/widget/detail_session.dart';
 import 'package:flutter/material.dart';

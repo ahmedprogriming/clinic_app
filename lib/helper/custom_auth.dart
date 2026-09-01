@@ -1,18 +1,18 @@
 
-   import 'package:clinic_app/constant.dart';
+   import 'package:clinic_app/Constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
   
 
-Future<void> LoginAuth(String email,String password) async {
+Future<void> loginAuth(String email,String password) async {
      await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
   }
 
-  Future<void> RegesterUser(String email,String password,String username) async
+  Future<void> regesterUser(String email,String password,String username) async
   {
     final credential = await FirebaseAuth.instance
     .createUserWithEmailAndPassword(
