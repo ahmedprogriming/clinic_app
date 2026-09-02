@@ -173,7 +173,7 @@ final emailController = TextEditingController();
                     ), // Spacing before the main login button
                     CustomButton(
                       namebutton: 'تسجيل الدخول',
-                      isLoading: isLoading,
+                    
                       onTap:isLoading ?null :  ()  {
                         if (formKey.currentState!.validate()) {
                           BlocProvider.of<LoginCubit>(

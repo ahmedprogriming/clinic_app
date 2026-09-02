@@ -235,7 +235,7 @@ class _EditPatientState extends State<EditPatient> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 150),
+                  const SizedBox(height: 100),
                   Container(
                     padding: const EdgeInsets.all(16),
                     height: 80,

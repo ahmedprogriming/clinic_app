@@ -236,7 +236,7 @@ class _ListSessionState extends State<ListSession> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'الجلسات السابقة',
+                                    'الجلسات المسجلة',
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: fontc,
@@ -360,7 +360,7 @@ class _ListSessionState extends State<ListSession> {
               ),
 
               Positioned(
-                bottom: 40,
+                bottom: 10,
                 right: 16,
                 child: SizedBox(
                   width: 160,

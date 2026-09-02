@@ -83,7 +83,10 @@ class _EditSessionState extends State<EditSession> {
       
       builder: (context, state) {
         final isLoading=state is EditSessionLoading;
-       
+       if(isLoading==true&&dateController.text.isEmpty)
+       {
+         return const Center(child: CircularProgressIndicator());
+       }
         return Directionality(
           textDirection: TextDirection.rtl,
           child: ListView(

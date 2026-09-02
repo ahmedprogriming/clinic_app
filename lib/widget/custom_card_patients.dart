@@ -4,208 +4,190 @@ import 'package:clinic_app/screens/sessions_page.dart';
 import 'package:clinic_app/widget/Send_Message_Dialog.dart';
 import 'package:flutter/material.dart';
 
-
 class CustomCardPatients extends StatelessWidget {
   const CustomCardPatients({
     super.key,
     required this.patientName,
     this.onTap,
     required this.numberphone,
-    required this.age, required this.docId,
+    required this.age,
+    required this.docId,
   });
+
   final String patientName;
   final String numberphone;
   final int age;
   final String docId;
-
   final void Function()? onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            SizedBox(
-              height: 140,
-              width: 1000,
+        child: SizedBox(
+          height: 140,
+          width: double.infinity,
+          child: Card(
+            color: Colors.white,
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Row(
+                  children: [
+                    // 1. صورة المريض (بدون Expanded لتثبيت الحجم الدائري)
+                    CircleAvatar(
+                      radius: 35,
+                      backgroundColor: gold.withValues(alpha: 0.18),
+                      child: Icon(
+                        Icons.person,
+                        color: darkGold,
+                        size: 35,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
 
-              child: Card(
-                color: Colors.white,
-                elevation: 2,
-
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 16,
-                  ),
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: Row(
-                      children: [
-                        // صورة المريض
-                          CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: gold.withValues(alpha: 0.18),
-                                  child: Icon(
-                                    Icons.person,
-                                    color: darkGold,
-                                    size: 40,
-                                  ),
-                                ),
-
-                        const SizedBox(width: 16),
-                        //date patient
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-
+                    // 2. بيانات المريض
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            patientName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
                             children: [
-                               Text(
-                                patientName,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                              const Icon(
+                                Icons.phone,
+                                size: 13,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  "967$numberphone+",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 14),
-
-                              Row(
-                                children:  [
-                                const  Icon(
-                                    Icons.phone,
-                                    size: 12,
-                                    color: Colors.green,
-                                  ),
-                                 const SizedBox(width: 5),
-                                  Text(
-                                    "967$numberphone+",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 14),
-
-                              Row(
-                                children:  [
-                                const  Icon(
-                                    Icons.cake_outlined,
-                                    size: 12,
-                                    color: kFontColor,
-                                  ),
-                                const  SizedBox(width: 5),
-                                  Text(
-                                    "$age سنة",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ],
                               ),
                             ],
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      SessionsPage.id,
-                                      arguments: docId
-                                    );
-                                  },
-                                  child: SizedBox(
-                                    width: 100,
-                                    height: 20,
-                                    child: const Text(
-                                      " قائمة الجلسات",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: kFontColor,
-
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 30),
-
-                            SizedBox(
-                              width: 100,
-                              child: const Text(
-                                "ارسال اشعار",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.grey,
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.cake_outlined,
+                                size: 13,
+                                color: kFontColor,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                "$age سنة",
+                                style: const TextStyle(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
 
-                            Expanded(
-                              child: IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return SendMessageDialog(
-                                        patientName: patientName,
-                                        phone: '+967$numberphone',
-                                        appointmentTime: '5:00 مساءً',
-                                      );
-                                    },
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.chat,
-                                  color: Color(0xFFD6A857),
-                                  size: 30,
-                                ),
+                    // 3. أزرار الجلسات وإرسال الإشعار
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              SessionsPage.id,
+                              arguments: docId,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: gold.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              "قائمة الجلسات",
+                              style: TextStyle(
+                                color: kFontColor,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  EditDataPatientPage.id,
-                                  arguments: docId
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SendMessageDialog(
+                                  patientName: patientName,
+                                  phone: '+967$numberphone',
+                                  appointmentTime: '5:00 مساءً',
                                 );
                               },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFFD6A857),
-                                size: 18,
-                              ),
-                            ),
-                          ],
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.chat,
+                            color: Color(0xFFD6A857),
+                            size: 24,
+                          ),
                         ),
                       ],
                     ),
-                  ),
+
+                    // 4. سهم الانتقال للتعديل
+                    IconButton(
+                      padding: const EdgeInsets.only(right: 4),
+                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          EditDataPatientPage.id,
+                          arguments: docId,
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Color(0xFFD6A857),
+                        size: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

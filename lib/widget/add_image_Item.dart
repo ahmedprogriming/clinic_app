@@ -4,12 +4,14 @@ import 'package:image_picker/image_picker.dart';
 
 class AddImageItem extends StatefulWidget {
   final ValueChanged<List<File>>? onImagesSelected;
+  final ValueChanged<List<String>>? onUrlsChanged;
   final List<String> initialUrls;
   final bool isReadOnly;
 
   const AddImageItem({
     super.key,
     this.onImagesSelected,
+    this.onUrlsChanged,
     this.initialUrls = const [],
     this.isReadOnly = false,
   });
@@ -19,8 +21,23 @@ class AddImageItem extends StatefulWidget {
 }
 
 class _AddImageItemState extends State<AddImageItem> {
+  late List<String> _currentUrls;
   final List<File> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUrls = List.from(widget.initialUrls);
+  }
+
+  @override
+  void didUpdateWidget(covariant AddImageItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialUrls != widget.initialUrls) {
+      _currentUrls = List.from(widget.initialUrls);
+    }
+  }
 
   Future<void> _pickImages() async {
     if (widget.isReadOnly) return;
@@ -37,10 +54,23 @@ class _AddImageItemState extends State<AddImageItem> {
     }
   }
 
+  void _removeUrlImage(int index) {
+    setState(() {
+      _currentUrls.removeAt(index);
+    });
+    widget.onUrlsChanged?.call(_currentUrls);
+  }
+
+  void _removeFileImage(int index) {
+    setState(() {
+      _selectedImages.removeAt(index);
+    });
+    widget.onImagesSelected?.call(_selectedImages);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final bool hasUrls = widget.initialUrls.isNotEmpty;
-    final bool hasFiles = _selectedImages.isNotEmpty;
+    final int totalCount = _currentUrls.length + _selectedImages.length;
 
     return Container(
       width: double.infinity,
@@ -50,7 +80,7 @@ class _AddImageItemState extends State<AddImageItem> {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0xffE6D8C0)),
       ),
-      child: !hasUrls && !hasFiles
+      child: totalCount == 0
           ? InkWell(
               onTap: widget.isReadOnly ? null : _pickImages,
               borderRadius: BorderRadius.circular(20),
@@ -83,16 +113,18 @@ class _AddImageItemState extends State<AddImageItem> {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.all(8),
-                    itemCount: hasUrls ? widget.initialUrls.length : _selectedImages.length,
+                    itemCount: totalCount,
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
+                      final bool isNetworkImage = index < _currentUrls.length;
+
                       return Stack(
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: hasUrls
+                            child: isNetworkImage
                                 ? Image.network(
-                                    widget.initialUrls[index],
+                                    _currentUrls[index],
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.cover,
@@ -104,7 +136,7 @@ class _AddImageItemState extends State<AddImageItem> {
                                     ),
                                   )
                                 : Image.file(
-                                    _selectedImages[index],
+                                    _selectedImages[index - _currentUrls.length],
                                     width: 100,
                                     height: 100,
                                     fit: BoxFit.cover,
@@ -116,10 +148,11 @@ class _AddImageItemState extends State<AddImageItem> {
                               right: 2,
                               child: GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    _selectedImages.removeAt(index);
-                                  });
-                                  widget.onImagesSelected?.call(_selectedImages);
+                                  if (isNetworkImage) {
+                                    _removeUrlImage(index);
+                                  } else {
+                                    _removeFileImage(index - _currentUrls.length);
+                                  }
                                 },
                                 child: const CircleAvatar(
                                   radius: 10,
