@@ -1,4 +1,4 @@
-import 'package:clinic_app/Constant.dart';
+import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_auth.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';

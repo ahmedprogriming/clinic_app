@@ -1,4 +1,4 @@
-import 'package:clinic_app/Constant.dart';
+import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/screens/edit_data_patient_page.dart';
 import 'package:clinic_app/screens/sessions_page.dart';
 import 'package:clinic_app/widget/Send_Message_Dialog.dart';

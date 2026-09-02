@@ -1,4 +1,4 @@
-import 'package:clinic_app/Constant.dart';
+import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/screens/add_new_patient_page.dart';
 import 'package:clinic_app/widget/lisr_patients.dart';
 import 'package:flutter/material.dart';

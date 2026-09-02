@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:clinic_app/Constant.dart';
+import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/screens/cubits/addSession_cubit/add_session_cubit.dart';
 import 'package:clinic_app/widget/add_image_Item.dart';

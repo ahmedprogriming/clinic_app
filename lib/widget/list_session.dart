@@ -1,4 +1,4 @@
-import 'package:clinic_app/Constant.dart';
+import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/model/sessions_modle.dart';
 import 'package:clinic_app/screens/add_new_session_Page.dart';
