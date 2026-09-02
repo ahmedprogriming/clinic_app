@@ -16,6 +16,7 @@ class CustomTextFiled extends StatefulWidget {
     this.hintColor,
     this.bordercolor,
     this.icon,
+    this.prefixIcon, // دعم تمرير أيقونة البداية
     this.fillcolor,
     this.fontsizehint,
     this.readonly = false,
@@ -27,7 +28,6 @@ class CustomTextFiled extends StatefulWidget {
   final String? hint;
   final int? maxLines;
   final void Function(String?)? onSave;
-
   final String? initialValue;
   final TextDecoration? textdecoration;
   final bool obsecureText;
@@ -37,6 +37,7 @@ class CustomTextFiled extends StatefulWidget {
   final Color? hintColor;
   final Color? bordercolor;
   final IconData? icon;
+  final IconData? prefixIcon;
   final Color? fillcolor;
   final double? fontsizehint;
   final bool readonly;
@@ -59,6 +60,9 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
 
   @override
   Widget build(BuildContext context) {
+    // تحديد الأيقونة الأمامية (تقبل إما prefixIcon أو icon للتوافق مع الكود السابق)
+    final IconData? leadingIcon = widget.prefixIcon ?? widget.icon;
+
     return SizedBox(
       height: widget.height,
       width: widget.width,
@@ -70,20 +74,16 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
         readOnly: widget.readonly,
         onTap: widget.onTap,
         controller: widget.controller,
-
         textDirection: widget.textdecoration == TextDecoration.none
             ? TextDirection.rtl
             : TextDirection.ltr,
-
         validator: (value) {
           if (value?.isEmpty ?? true) {
             return 'الحقل مطلوب';
-          } else {
-            return null;
           }
+          return null;
         },
         cursorColor: kFontColor,
-        //textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
         maxLines: widget.maxLines,
         decoration: InputDecoration(
@@ -91,14 +91,24 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
           fillColor: widget.fillcolor ?? kPrimaryColor,
           hintText: widget.hint,
           hintTextDirection: TextDirection.rtl,
-
           hintStyle: TextStyle(
-            color: widget.hintColor ?? Colors.black,
-            fontSize: widget.fontsizehint ?? 16,
+            color: widget.hintColor ?? Colors.black54,
+            fontSize: widget.fontsizehint ?? 15,
           ),
-          // Left side in RTL (Password toggle eye)
-          prefixIcon: widget.showPasswordIcon
+
+          // 1. أيقونة الحقل الأساسية (تظهر في البداية)
+          prefixIcon: leadingIcon != null
+              ? Icon(
+                  leadingIcon,
+                  color: const Color(0xffC1AD94),
+                  size: 22,
+                )
+              : null,
+
+          // 2. زر إظهار/إخفاء كلمة المرور (يظهر في نهاية الحقل)
+          suffixIcon: widget.showPasswordIcon
               ? IconButton(
+                  splashRadius: 20,
                   onPressed: () {
                     setState(() {
                       isObsecure = !isObsecure;
@@ -111,10 +121,7 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
                   ),
                 )
               : null,
-          // Right side in RTL (Standard input icon, if provided)
-          suffixIcon: widget.icon != null
-              ? Icon(widget.icon, color: const Color(0xffC1AD94), size: 20)
-              : null,
+
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 14,
@@ -125,11 +132,11 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: widget.bordercolor ?? kFontColor),
+            borderSide: BorderSide(color: widget.bordercolor ?? const Color(0xffE6D8C0)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: kFontColor),
+            borderSide: BorderSide(color: kFontColor, width: 1.5),
           ),
         ),
       ),

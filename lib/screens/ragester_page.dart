@@ -9,7 +9,6 @@ import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RagesterPage extends StatefulWidget {
   const RagesterPage({super.key});
@@ -21,167 +20,219 @@ class RagesterPage extends StatefulWidget {
 }
 
 class _RagesterPageState extends State<RagesterPage> {
-  final GlobalKey<FormState> formKey = GlobalKey();
-  String? email;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
-  String? password;
-  String? confirmPassword;
-  String? username;
+  bool isLoading = false;
 
-  bool IsLoad = false;
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    if (!formKey.currentState!.validate()) return;
+
+    if (passwordController.text != confirmPasswordController.text) {
+      showSnackbar(context, 'كلمتا المرور غير متطابقتين');
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      await regesterUser(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+        nameController.text.trim(),
+      );
+      if (!mounted) return;
+      BlocProvider.of<PatientsCubit>(context).getpatients();
+      Navigator.pushReplacementNamed(
+        context,
+        DashboardPage.id,
+        arguments: emailController.text.trim(),
+      );
+    } on FirebaseAuthException catch (ex) {
+      if (ex.code == 'weak-password') {
+        showSnackbar(context, 'كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى.');
+      } else if (ex.code == 'email-already-in-use') {
+        showSnackbar(
+          context,
+          'هذا البريد الإلكتروني مسجل بالفعل، يرجى استخدام بريد آخر.',
+        );
+      } else if (ex.code == 'invalid-email') {
+        showSnackbar(context, 'البريد الإلكتروني غير صحيح، يرجى التأكد منه.');
+      } else {
+        showSnackbar(context, ex.message ?? 'تعذر إكمال التسجيل');
+      }
+    } catch (_) {
+      showSnackbar(context, 'حدث خطأ، يرجى المحاولة مرة أخرى.');
+    } finally {
+      if (mounted) setState(() => isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ModalProgressHUD(
-      inAsyncCall: IsLoad,
-      child: Scaffold(
-        backgroundColor: kPrimaryColor,
-
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: formKey,
-            child: ListView(
-              children: [
-                SizedBox(height: 40),
-                Image.asset('lib/assets/images/logo.png', height: 150),
-                SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "انشاء حساب",
-                      style: TextStyle(
-                        fontSize: 32,
-                        color: kFontColor,
-                        fontFamily: 'Pacifico',
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 40),
-                CustomTextFiled(
-                  hint: 'أسم المستخدم',
-                  textdecoration: TextDecoration.none,
-                  onChange: (data) {
-                    username = data;
-                  },
-                ),
-
-                const SizedBox(height: 20),
-                CustomTextFiled(
-                  hint: 'البريد الالكتروني',
-
-                  onChange: (data) {
-                    email = data;
-                  },
-                ),
-                SizedBox(height: 15),
-                CustomTextFiled(
-                  obsecureText: true,
-                  hint: 'كلمة المرور',
-                  showPasswordIcon: true,
-                  onChange: (data) {
-                    password = data;
-                  },
-                ),
-                SizedBox(height: 15),
-                CustomTextFiled(
-                  obsecureText: true,
-                  showPasswordIcon: true,
-                  hint: 'تأكيد كلمة المرور',
-                  onChange: (data) {
-                    confirmPassword = data;
-                  },
-                ),
-                SizedBox(height: 30),
-
-                CustomButton(
-                  namebutton: 'تسجيل ',
-                  onTap: () async {
-                    if (formKey.currentState!.validate()) {
-                      IsLoad = true;
-                      setState(() {});
-                      if (password != confirmPassword) {
-                        showSnackbar(context, 'كلمتا المرور غير متطابقتين');
-                        IsLoad = false;
-                        setState(() {});
-                        return;
-                      }
-                      try {
-                        await regesterUser(email!, password!, username!);
-                        BlocProvider.of<PatientsCubit>(context).getpatients();
-                        Navigator.pushNamed(
-                          context,
-                          DashboardPage.id,
-                          arguments: email,
-                        );
-                      } on FirebaseAuthException catch (ex) {
-                        if (ex.code == 'weak-password') {
-                          showSnackbar(
-                            context,
-                            'كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى.',
-                          );
-                        } else if (ex.code == 'email-already-in-use') {
-                          showSnackbar(
-                            context,
-                            'هذا البريد الإلكتروني مسجل بالفعل، يرجى استخدام بريد آخر.',
-                          );
-                        } else if (ex.code == 'invalid-email') {
-                          showSnackbar(
-                            context,
-                            'البريد الإلكتروني غير صحيح، يرجى التأكد منه.',
-                          );
-                        } else if (ex.code == 'operation-not-allowed') {
-                          showSnackbar(
-                            context,
-                            'إنشاء الحساب بهذا النوع من تسجيل الدخول غير مفعل.',
-                          );
-                        } else if (ex.code == 'network-request-failed') {
-                          showSnackbar(
-                            context,
-                            'حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة مرة أخرى.',
-                          );
-                        } else {
-                          showSnackbar(context, ex.message ?? ex.code);
-                        }
-                      } catch (ex) {
-                        showSnackbar(context, 'حدث خطأ، حاول مرة أخرى');
-                      }
-                      IsLoad = false;
-
-                      setState(() {});
-                    }
-                  },
-                ),
-
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, LoginPage.id);
-                        },
-                        child: Text(
-                          'تسجيل الدخول',
-                          style: TextStyle(
-                            color: kFontColor,
-                            fontWeight: FontWeight.bold,
+    return Scaffold(
+      backgroundColor: kPrimaryColor,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // أيقونة / شعار
+                      Center(
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(
+                              0xffFDF9F1,
+                            ), // نفس لون خلفية الشعار بالضبط
+                            boxShadow: [
+                              BoxShadow(
+                                color: gold.withValues(alpha: 0.15),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Transform.scale(
+                              scale:
+                                  1.6, // تكبير الشعار الداخلي لملء الفراغ المربع وقص الأطراف الزائدة
+                              child: Image.asset(
+                                'lib/assets/icons/clinic_logo5.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Text(
-                      'هل لديك حساب بالفعل؟',
+                      const SizedBox(height: 20),
 
-                      style: TextStyle(color: Colors.black87),
-                    ),
-                  ],
+                      const Text(
+                        "إنشاء حساب جديد",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff211A16),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "أدخل بياناتك للانضمام لنظام إدارة العيادة",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14, color: fontc),
+                      ),
+                      const SizedBox(height: 28),
+
+                      // بطاقة الإدخال البيضاء
+                      Container(
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            CustomTextFiled(
+                              hint: 'اسم المستخدم',
+                              controller: nameController,
+                              prefixIcon: Icons.person_outline_rounded,
+                            ),
+                            const SizedBox(height: 14),
+                            CustomTextFiled(
+                              hint: 'البريد الإلكتروني',
+                              controller: emailController,
+                              prefixIcon: Icons.email_outlined,
+                            ),
+                            const SizedBox(height: 14),
+                            CustomTextFiled(
+                              obsecureText: true,
+                              showPasswordIcon: true,
+                              hint: 'كلمة المرور',
+                              controller: passwordController,
+                              prefixIcon: Icons.lock_outline_rounded,
+                            ),
+                            const SizedBox(height: 14),
+                            CustomTextFiled(
+                              obsecureText: true,
+                              showPasswordIcon: true,
+                              hint: 'تأكيد كلمة المرور',
+                              controller: confirmPasswordController,
+                              prefixIcon: Icons.lock_reset_rounded,
+                            ),
+                            const SizedBox(height: 24),
+
+                            CustomButton(
+                              namebutton: isLoading
+                                  ? 'جاري إنشاء الحساب...'
+                                  : 'تسجيل الحساب',
+                              buttonColor: gold,
+                              onTap: isLoading ? null : _handleRegister,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // رابط الانتقال لتسجيل الدخول
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.pushReplacementNamed(
+                              context,
+                              LoginPage.id,
+                            ),
+                            child: Text(
+                              'تسجيل الدخول',
+                              style: TextStyle(
+                                color: darkGold,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'لديك حساب بالفعل؟',
+                            style: TextStyle(color: fontc, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                //  Spacer(flex: 3),
-              ],
+              ),
             ),
           ),
         ),
