@@ -53,12 +53,12 @@ class PatientsCubit extends Cubit<PatientsState> {
     emit(PatientsSuccess(patientsList: filteredPatients));
   }
 
-  void filterByGender(String? gender) {
-    if (gender == null) {
+  void filterByAddress(String? address) {
+    if (address == null) {
       filteredPatients = patientsList;
     } else {
       filteredPatients = patientsList.where((patient) {
-        return patient.gandar == gender;
+        return patient.address == address;
       }).toList();
     }
 

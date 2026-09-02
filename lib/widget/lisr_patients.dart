@@ -1,8 +1,8 @@
-
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_button.dart';
 import 'package:clinic_app/widget/custom_card_patients.dart';
+import 'package:clinic_app/widget/customFilterBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,6 +22,7 @@ class _ListPatientsState extends State<ListPatients> {
     super.dispose();
   }
 
+  String? selectedCity;
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -52,7 +53,10 @@ class _ListPatientsState extends State<ListPatients> {
                         horizontal: 16,
                       ),
                       hintText: 'ابحث عن اسم المريض',
-                      prefixIcon: const Icon(Icons.search, color: Color(0xff999896)),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Color(0xff999896),
+                      ),
                       hintStyle: const TextStyle(
                         color: Color(0xff999896),
                         fontSize: 12,
@@ -82,44 +86,31 @@ class _ListPatientsState extends State<ListPatients> {
                 height: 50,
                 child: CustomButton(
                   buttonColor: const Color(0xffFDF9F1),
-                  borderColor: const Color(0xffEBE7E4),
-                  namebutton: 'فلترة',
-                  icon: const Icon(Icons.tune, size: 24, color: Color(0xff8D734B)),
+                  borderColor: selectedCity != null
+                      ? const Color(0xffB2935B)
+                      : const Color(0xffEBE7E4),
+                  namebutton: selectedCity ?? 'فلترة',
+                  icon: Icon(
+                    Icons.tune,
+                    size: 22,
+                    color: selectedCity != null
+                        ? const Color(0xffB2935B)
+                        : const Color(0xff8D734B),
+                  ),
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
                       builder: (context) {
-                        return Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ListTile(
-                                leading: const Icon(Icons.people),
-                                title: const Text('الكل'),
-                                onTap: () {
-                                  context.read<PatientsCubit>().filterByGender(null);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.male),
-                                title: const Text('ذكر'),
-                                onTap: () {
-                                  context.read<PatientsCubit>().filterByGender('ذكر');
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                leading: const Icon(Icons.female),
-                                title: const Text('أنثى'),
-                                onTap: () {
-                                  context.read<PatientsCubit>().filterByGender('أنثى');
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          ),
+                        return FilterBottomSheet(
+                          selectedCity: selectedCity,
+                          onFilterApplied: (city) {
+                            setState(() {
+                              selectedCity = city;
+                            });
+                            context.read<PatientsCubit>().filterByAddress(city);
+                          },
                         );
                       },
                     );
@@ -172,15 +163,16 @@ class _ListPatientsState extends State<ListPatients> {
 
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(), // Disables inner scrolling so parent scrolls everything
+                  physics:
+                      const NeverScrollableScrollPhysics(), // Disables inner scrolling so parent scrolls everything
                   itemCount: patientsList.length,
                   itemBuilder: (context, index) {
                     final patient = patientsList[index];
 
                     return CustomCardPatients(
                       patientName: patient.patientaname,
-                      age: patient.age ,
-                      numberphone: patient.numberPhone ,
+                      age: patient.age,
+                      numberphone: patient.numberPhone,
                       docId: patient.docId ?? '',
                       onTap: () {
                         // Navigate to patient sessions or edit page
