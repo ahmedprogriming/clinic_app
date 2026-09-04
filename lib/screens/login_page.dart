@@ -58,9 +58,11 @@ class _LoginPageState extends State<LoginPage> {
             context,
             DashboardPage.id,
             arguments: emailController.text.trim(),
+            
           );
+            showSnackbar(context, 'تم تسجيل الدخول بنجاح', type: SnackBarType.success);
         } else if (state is LoginFailure) {
-          showSnackbar(context, state.errMessage);
+          showSnackbar(context, state.errMessage, type: SnackBarType.error);
         }
       },
       builder: (context, state) {
@@ -222,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // زر الدخول
                                 CustomButton(
                                   namebutton: isLoading
-                                      ? 'جاري التحقق...'
+                                      ? '...جاري التحقق'
                                       : 'تسجيل الدخول',
                                   buttonColor: gold,
                                   onTap: isLoading

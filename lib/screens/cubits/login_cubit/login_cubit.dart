@@ -60,10 +60,10 @@ void toggleRememberMe(bool value) {
           'حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة مرة أخرى.',rememberMe: rememberMe
         ));
       } else {
-        emit(LoginFailure(errMessage:  ex.message ?? ex.code,rememberMe: rememberMe));
+        emit(LoginFailure(errMessage:  ex.message ??  'حدث خطأ، يرجى المحاولة مرة أخرى.',rememberMe: rememberMe));
       }
     } on Exception catch (ex) {
-      emit(LoginFailure(errMessage:  ex.toString(),rememberMe: rememberMe));
+      emit(LoginFailure(errMessage:  'حدث خطأ، يرجى المحاولة مرة أخرى.',rememberMe: rememberMe));
     }
   }
 }

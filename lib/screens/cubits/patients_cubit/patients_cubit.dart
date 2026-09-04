@@ -24,7 +24,7 @@ class PatientsCubit extends Cubit<PatientsState> {
         }
 
         if (patientsList.isEmpty) {
-          emit(PatientsFailure(errMessage: 'لا توجد بيانات'));
+          emit(PatientsEmpty());
         } else {
           emit(PatientsSuccess(patientsList: patientsList));
         }

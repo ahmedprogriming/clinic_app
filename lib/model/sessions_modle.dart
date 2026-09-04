@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SessionModel {
   final String docId;
-  final List<DocumentReference> images;    // حقل Reference
+  final List<dynamic> images;    // حقل Reference
   final DocumentReference? patientID;  // حقل Reference
   final String state;
   final Timestamp? date;
@@ -31,15 +31,14 @@ class SessionModel {
   factory SessionModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
 // معالجة الصور سواء كانت مصفوفة جديدة أو مرجع قديم منفرد
-    List<DocumentReference> parsedImages = [];
+   List<dynamic> parsedImages = [];
     if (data['images'] is List) {
-      parsedImages = (data['images'] as List)
-          .whereType<DocumentReference>()
-          .toList();
+      // الاحتفاظ بجميع العناصر سواء كانت DocumentReference أو String
+      parsedImages = List<dynamic>.from(data['images']);
     } else if (data['imageID'] is DocumentReference) {
-      parsedImages = [data['imageID'] as DocumentReference];
+      parsedImages = [data['imageID']];
     } else if (data['ImageID'] is DocumentReference) {
-      parsedImages = [data['ImageID'] as DocumentReference];
+      parsedImages = [data['ImageID']];
     }
     return SessionModel(
       docId: doc.id,

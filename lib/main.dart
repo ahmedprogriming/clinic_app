@@ -35,16 +35,16 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final bool isFirstTime = prefs.getBool('is_first_time') ?? true;
   final bool rememberMe = prefs.getBool('remember_me') ?? false;
-  
+
   User? currentUser = FirebaseAuth.instance.currentUser;
 
-// إذا لم يفعل المستخدم خيار "تذكرني"، يتم تسجيل الخروج تلقائياً
-  if(currentUser != null && !rememberMe) {
+  // إذا لم يفعل المستخدم خيار "تذكرني"، يتم تسجيل الخروج تلقائياً
+  if (currentUser != null && !rememberMe) {
     await FirebaseAuth.instance.signOut();
     currentUser = null;
   }
 
- String startRouteId;
+  String startRouteId;
 
   if (currentUser != null) {
     // المستخدم مفعل "تذكرني" وجلسته نشطة
@@ -59,18 +59,18 @@ void main() async {
   // إزالة شاشة الـ Splash عند انتهاء التحميل والانتقال للتطبيق
   FlutterNativeSplash.remove();
 
-  runApp( ClinicApp(startRoute: startRouteId ));
+  runApp(ClinicApp(startRoute: startRouteId));
 }
 
 class ClinicApp extends StatelessWidget {
   const ClinicApp({super.key, this.startRoute = LoginPage.id});
- final String startRoute;
+  final String startRoute;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginCubit()),
-        BlocProvider(create: (context) => PatientsCubit()),
+        BlocProvider(create: (context) => PatientsCubit()..getpatients()),
         BlocProvider(create: (context) => EditPatientCubit()),
         BlocProvider(create: (context) => SessionlistCubit()),
       ],

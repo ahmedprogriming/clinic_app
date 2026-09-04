@@ -37,7 +37,7 @@ class AddPatientCubit extends Cubit<AddPatientState> {
 
       emit(AddPatientSuccess(selectedGender: selectedGender));
     } catch (e) {
-      emit(AddPatientFailure(e.toString(), selectedGender: selectedGender));
+      emit(AddPatientFailure( 'حدث خطأ، يرجى المحاولة مرة أخرى.', selectedGender: selectedGender));
     }
   }
 

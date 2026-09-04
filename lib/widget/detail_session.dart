@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clinic_app/constant.dart';
 import 'package:clinic_app/helper/custom_showscanr.dart';
 import 'package:clinic_app/helper/selected_state.dart';
@@ -12,9 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart' as intl;
 
-class DetailSession extends StatelessWidget {
+class DetailSession extends StatefulWidget {
   const DetailSession({super.key, required this.sessionId});
   final String sessionId;
+
+  @override
+  State<DetailSession> createState() => _DetailSessionState();
+}
+
+class _DetailSessionState extends State<DetailSession> {
   String _formatTimestampShorts(dynamic timestamp) {
     if (timestamp == null) return 'غير محدد';
     DateTime date = timestamp.toDate();
@@ -37,18 +45,18 @@ class DetailSession extends StatelessWidget {
     return '${date.day}/ $monthName /${date.year}';
   }
 
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<EditSessionCubit, EditSessionState>(
       listener: (context, state) {
        
-        if (state is EditSessionFailure) {
-          showSnackbar(context, state.erroMessage);
-        }
+      
         if (state is SessionDeletedSuccess) {
-          showSnackbar(context, 'تم حذف الجلسة بنجاح');
+          showSnackbar(context, 'تم حذف الجلسة بنجاح', type: SnackBarType.success);
           Navigator.pop(context);
         }
+        
       },
       builder: (context, state) {
         if (state is EditSessionLoading) {
@@ -56,6 +64,8 @@ class DetailSession extends StatelessWidget {
         }
         if (state is EditSessionLoadedData) {
           final session = state.SessionData;
+          // نملأ القائمة فقط إذا كانت فارغة لأول مرة
+
 
           return Directionality(
             textDirection: TextDirection.rtl,
@@ -303,7 +313,7 @@ class DetailSession extends StatelessWidget {
                               Navigator.pushNamed(
                                 context,
                                 EditSessionPage.id,
-                                arguments: sessionId,
+                                arguments: widget.sessionId,
                               );
                             },
                           ),
@@ -320,7 +330,7 @@ class DetailSession extends StatelessWidget {
                             borderColor: const Color(0xffE9D9BD),
                             iconColor: gold,
                             onPressed: () {
-                              _showDeleteConfirmationDialog(context,sessionId);
+                              _showDeleteConfirmationDialog(context,widget.sessionId);
                              
                             },
                           ),
@@ -340,6 +350,7 @@ class DetailSession extends StatelessWidget {
       },
     );
   }
+
   void _showDeleteConfirmationDialog(BuildContext context, String sessionId) {
   showDialog(
     context: context,

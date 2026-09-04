@@ -71,7 +71,7 @@ emit(AddSessionLoading(selectedStateSessionType:  selectedSessionType,secetedSta
     final int nextSessionNumber = (countSnapshot.count ?? 0) + 1;
 
     // 2. رفع الصور وحفظها في collection منفصل واستخراج المراجع
-    final List<DocumentReference> imageReferences = [];
+    final List<dynamic> imageReferences = [];
 
     for (final file in imageFiles) {
     // رفع الملف إلى Cloudinary واسترجاع الرابط المباشر
@@ -103,7 +103,7 @@ emit(AddSessionLoading(selectedStateSessionType:  selectedSessionType,secetedSta
 
       emit(AddSessionSuccess(selectedStateSessionType:  selectedSessionType,secetedStateSessionState:  secetedSessionState));
     } catch (e) {
-      emit(AddSessionFailure(selectedStateSessionType:  selectedSessionType,secetedStateSessionState:  secetedSessionState,erroMessage: e.toString()));
+      emit(AddSessionFailure(selectedStateSessionType:  selectedSessionType,secetedStateSessionState:  secetedSessionState,erroMessage:  'حدث خطأ، يرجى المحاولة مرة أخرى.'));
     }
   }
 }

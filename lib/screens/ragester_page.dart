@@ -9,6 +9,7 @@ import 'package:clinic_app/widget/custom_form_textField.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RagesterPage extends StatefulWidget {
   const RagesterPage({super.key});
@@ -42,7 +43,7 @@ class _RagesterPageState extends State<RagesterPage> {
     if (!formKey.currentState!.validate()) return;
 
     if (passwordController.text != confirmPasswordController.text) {
-      showSnackbar(context, 'كلمتا المرور غير متطابقتين');
+      showSnackbar(context, 'كلمتا المرور غير متطابقتين', type: SnackBarType.error);
       return;
     }
 
@@ -61,21 +62,25 @@ class _RagesterPageState extends State<RagesterPage> {
         DashboardPage.id,
         arguments: emailController.text.trim(),
       );
+      // حفظ حالة "is_first_time" في SharedPreferences
+final prefs = await SharedPreferences.getInstance();
+await prefs.setBool('is_first_time', false);
     } on FirebaseAuthException catch (ex) {
       if (ex.code == 'weak-password') {
-        showSnackbar(context, 'كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى.');
+        showSnackbar(context, 'كلمة المرور ضعيفة، يرجى اختيار كلمة مرور أقوى.', type: SnackBarType.error);
       } else if (ex.code == 'email-already-in-use') {
         showSnackbar(
           context,
           'هذا البريد الإلكتروني مسجل بالفعل، يرجى استخدام بريد آخر.',
+          type: SnackBarType.error,
         );
       } else if (ex.code == 'invalid-email') {
-        showSnackbar(context, 'البريد الإلكتروني غير صحيح، يرجى التأكد منه.');
+        showSnackbar(context, 'البريد الإلكتروني غير صحيح، يرجى التأكد منه.', type: SnackBarType.error);
       } else {
-        showSnackbar(context, ex.message ?? 'تعذر إكمال التسجيل');
+        showSnackbar(context, ex.message ?? 'تعذر إكمال التسجيل', type: SnackBarType.error);
       }
     } catch (_) {
-      showSnackbar(context, 'حدث خطأ، يرجى المحاولة مرة أخرى.');
+      showSnackbar(context, 'حدث خطأ، يرجى المحاولة مرة أخرى.', type: SnackBarType.error);
     } finally {
       if (mounted) setState(() => isLoading = false);
     }
@@ -194,7 +199,7 @@ class _RagesterPageState extends State<RagesterPage> {
 
                             CustomButton(
                               namebutton: isLoading
-                                  ? 'جاري إنشاء الحساب...'
+                                  ? '...جاري إنشاء الحساب'
                                   : 'تسجيل الحساب',
                               buttonColor: gold,
                               onTap: isLoading ? null : _handleRegister,

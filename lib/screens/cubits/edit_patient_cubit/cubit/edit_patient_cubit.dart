@@ -83,7 +83,7 @@ class EditPatientCubit extends Cubit<EditPatientState> {
       await firestore.collection('Patients').doc(patientId).delete();
       emit(EditPatientDeletedSuccess(selectedGender: selectedGender));
     } catch (e) {
-      emit(EditPatientFialure( e.toString(),selectedGender: selectedGender));
+      emit(EditPatientFialure(  'حدث خطأ، يرجى المحاولة مرة أخرى.',selectedGender: selectedGender));
     }
   }
   

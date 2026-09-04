@@ -5,6 +5,7 @@ sealed class PatientsState {}
 
 final class PatientsInitial extends PatientsState {}
 final class PatientsLoding extends PatientsState {}
+final class PatientsEmpty extends PatientsState {}
 final class PatientsSuccess extends PatientsState
  {
   final List<PatientsModel> patientsList ;

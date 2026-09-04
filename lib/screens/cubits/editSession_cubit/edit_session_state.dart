@@ -8,7 +8,7 @@ final class EditSessionLoading extends EditSessionState {}
 final class EditSessionLoadedData extends EditSessionState {
   final  SessionModel? SessionData;
 final String? patientName;
-final List<String> imageUrls; // إضافة روابط الصور
+final List<dynamic> imageUrls; // إضافة روابط الصور
   EditSessionLoadedData( {this.SessionData,this.patientName,this.imageUrls=const[]});
 }
 final class SessionUpdatedSuccess extends EditSessionState {}

@@ -38,7 +38,7 @@ class SessionlistCubit extends Cubit<SessionlistState> {
             _applyFilter();
           },
           onError: (e) {
-            emit(SessionlistFailure(erroMessage: e.toString()));
+            emit(SessionlistFailure(erroMessage:  'حدث خطأ، يرجى المحاولة مرة أخرى.'));
           },
         );
   }

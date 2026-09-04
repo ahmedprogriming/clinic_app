@@ -1,3 +1,5 @@
+import 'package:clinic_app/constant.dart';
+import 'package:clinic_app/screens/add_new_patient_page.dart';
 import 'package:clinic_app/screens/cubits/patients_cubit/patients_cubit.dart';
 import 'package:clinic_app/widget/custom_Appbar.dart';
 import 'package:clinic_app/widget/custom_button.dart';
@@ -135,16 +137,83 @@ class _ListPatientsState extends State<ListPatients> {
                   ),
                 );
 
-              case PatientsFailure():
+              case PatientsEmpty():
                 return Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      state.errMessage,
-                      style: const TextStyle(fontSize: 16, color: Colors.red),
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // أيقونة هادئة ومعبرة
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withValues(alpha:0.08),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.person_add_alt_1_rounded,
+                            size: 64,
+                            color: darkGold, // لون أزرق وقور
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        // عنوان رئيسي
+                        const Text(
+                          'سجل المرضى فارغ حالياً',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1F2937),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // توجيه إرشادي للطبيب
+                        const Text(
+                          'ابدأ بتسجيل أول مريض لمتابعة جلسات الحجامة والتشخيص الطبي بسهولة.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                            height: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+
+                        // زر إجراء سريع (Call To Action)
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            // توجيه الطبيب إلى شاشة إضافة مريض
+                            Navigator.pushNamed(context, AddNewPatientPage.id);
+                          },
+                          icon: const Icon(Icons.add, color: Colors.white),
+                          label: const Text(
+                            'إضافة مريض جديد',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:  const Color.fromARGB(255, 190, 144, 60), // لون ذهبي
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
+
 
               case PatientsSuccess():
                 final patientsList = state.patientsList;
@@ -179,6 +248,37 @@ class _ListPatientsState extends State<ListPatients> {
                       },
                     );
                   },
+                );
+                case PatientsFailure():
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline_rounded,
+                          size: 48,
+                          color: Colors.redAccent,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          state.errMessage,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 15, color: Colors.redAccent),
+                        ),
+                        const SizedBox(height: 16),
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            // إعادة جلب البيانات
+                            context.read<PatientsCubit>().getpatients();
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('إعادة المحاولة'),
+                        ),
+                      ],
+                    ),
+                  ),
                 );
             }
           },

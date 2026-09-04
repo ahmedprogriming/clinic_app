@@ -119,12 +119,12 @@ class _SendMessageDialogState extends State<SendMessageDialog> {
         _showError('لا يوجد تطبيق رسائل متاح على الجهاز');
       }
     } on PlatformException catch (e) {
-      debugPrint('SMS Error: ${e.message}');
+     
       if (mounted) {
         _showError('تعذر فتح تطبيق الرسائل');
       }
     } catch (e) {
-      debugPrint('SMS Error: $e');
+      
       if (mounted) {
         _showError('حدث خطأ أثناء فتح الرسائل');
       }

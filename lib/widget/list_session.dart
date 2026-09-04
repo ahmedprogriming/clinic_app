@@ -101,7 +101,7 @@ class _ListSessionState extends State<ListSession> {
           sessionsDate = state.sessionsList;
         }
         if (state is SessionlistFailure) {
-          showSnackbar(context, state.erroMessage);
+          showSnackbar(context, state.erroMessage, type: SnackBarType.error);
         }
       },
       builder: (context, state) {
@@ -141,7 +141,7 @@ class _ListSessionState extends State<ListSession> {
                       }
 
                       if (state is EditPatientFialure) {
-                        showSnackbar(context, state.erroMessage);
+                        showSnackbar(context, state.erroMessage, type: SnackBarType.error);
                       }
                     },
                     builder: (context, state) {
@@ -336,7 +336,7 @@ class _ListSessionState extends State<ListSession> {
                       child: Padding(
                         padding: EdgeInsets.all(20),
                         child: Text(
-                          'لا توجد جلسات مسجلة تطابق بحثك',
+                          'قم بتسجيل أول جلسة لهذا المريض',
                           style: TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                       ),

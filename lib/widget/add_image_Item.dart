@@ -1,11 +1,13 @@
 import 'dart:io';
+import 'package:clinic_app/helper/custom_showscanr.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddImageItem extends StatefulWidget {
   final ValueChanged<List<File>>? onImagesSelected;
-  final ValueChanged<List<String>>? onUrlsChanged;
-  final List<String> initialUrls;
+  final ValueChanged<List<dynamic>>? onUrlsChanged;
+  final List<dynamic> initialUrls;
   final bool isReadOnly;
 
   const AddImageItem({
@@ -28,20 +30,27 @@ class _AddImageItemState extends State<AddImageItem> {
   @override
   void initState() {
     super.initState();
-    _currentUrls = List.from(widget.initialUrls);
+    _currentUrls = List<String>.from(widget.initialUrls);
   }
 
   @override
   void didUpdateWidget(covariant AddImageItem oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.initialUrls != widget.initialUrls) {
-      _currentUrls = List.from(widget.initialUrls);
+    // مقارنة محتوى القائمتين وليس فقط مرجع الذاكرة
+    if (!listEquals(oldWidget.initialUrls, widget.initialUrls)) {
+      _currentUrls = List<String>.from(widget.initialUrls);
     }
   }
-
+bool _isPicking = false;
   Future<void> _pickImages() async {
-    if (widget.isReadOnly) return;
+  // إذا كان الحقل مقفلاً أو المعرض مفتوحاً بالفعل، تجاهل النقر
+  if (widget.isReadOnly || _isPicking) return;
 
+  setState(() {
+    _isPicking = true;
+  });
+
+  try {
     final List<XFile> pickedFiles = await _picker.pickMultiImage(
       imageQuality: 80,
     );
@@ -50,22 +59,31 @@ class _AddImageItemState extends State<AddImageItem> {
       setState(() {
         _selectedImages.addAll(pickedFiles.map((x) => File(x.path)));
       });
-      widget.onImagesSelected?.call(_selectedImages);
+      widget.onImagesSelected?.call(List<File>.from(_selectedImages));
     }
+  } catch (e) {
+   showSnackbar(context, 'حدث خطأ أثناء اختيار الصور: $e', type: SnackBarType.error);
+  } finally {
+    if (mounted) {
+      setState(() {
+        _isPicking = false;
+      });
+    }
+  }
   }
 
   void _removeUrlImage(int index) {
     setState(() {
       _currentUrls.removeAt(index);
     });
-    widget.onUrlsChanged?.call(_currentUrls);
+    widget.onUrlsChanged?.call(List<String>.from(_currentUrls));
   }
 
   void _removeFileImage(int index) {
     setState(() {
       _selectedImages.removeAt(index);
     });
-    widget.onImagesSelected?.call(_selectedImages);
+    widget.onImagesSelected?.call(List<File>.from(_selectedImages));
   }
 
   @override
@@ -105,9 +123,12 @@ class _AddImageItemState extends State<AddImageItem> {
           : Row(
               children: [
                 if (!widget.isReadOnly)
-                  IconButton(
-                    icon: const Icon(Icons.add_a_photo, color: Color(0xffB08D57)),
-                    onPressed: _pickImages,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: IconButton(
+                      icon: const Icon(Icons.add_a_photo, color: Color(0xffB08D57), size: 28),
+                      onPressed: _pickImages,
+                    ),
                   ),
                 Expanded(
                   child: ListView.separated(
@@ -119,6 +140,7 @@ class _AddImageItemState extends State<AddImageItem> {
                       final bool isNetworkImage = index < _currentUrls.length;
 
                       return Stack(
+                        clipBehavior: Clip.none,
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
@@ -144,8 +166,8 @@ class _AddImageItemState extends State<AddImageItem> {
                           ),
                           if (!widget.isReadOnly)
                             Positioned(
-                              top: 2,
-                              right: 2,
+                              top: -4,
+                              right: -4,
                               child: GestureDetector(
                                 onTap: () {
                                   if (isNetworkImage) {
@@ -154,10 +176,13 @@ class _AddImageItemState extends State<AddImageItem> {
                                     _removeFileImage(index - _currentUrls.length);
                                   }
                                 },
-                                child: const CircleAvatar(
-                                  radius: 10,
-                                  backgroundColor: Colors.red,
-                                  child: Icon(Icons.close, size: 12, color: Colors.white),
+                                child: Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.close, size: 14, color: Colors.white),
                                 ),
                               ),
                             ),
